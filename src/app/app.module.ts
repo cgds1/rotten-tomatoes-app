@@ -1,6 +1,7 @@
-import { NgModule } from '@angular/core';
+import { APP_INITIALIZER, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { RouteReuseStrategy } from '@angular/router';
+import { provideHttpClient, withInterceptors } from '@angular/common/http';
 
 import { IonicModule, IonicRouteStrategy } from '@ionic/angular';
 import { IonicStorageModule } from '@ionic/storage-angular';
@@ -12,6 +13,9 @@ import { AUTH_SERVICE, MOVIES_SERVICE, COMMENTS_SERVICE } from './core/services/
 import { AuthMockService } from './core/services/auth.mock.service';
 import { MoviesMockService } from './core/services/movies.mock.service';
 import { CommentsMockService } from './core/services/comments.mock.service';
+import { AuthService } from './core/services/auth.service';
+import { authInterceptor } from './core/interceptors/auth.interceptor';
+import { errorInterceptor } from './core/interceptors/error.interceptor';
 
 const serviceProviders = environment.useMocks
   ? [
@@ -22,6 +26,10 @@ const serviceProviders = environment.useMocks
   : [
       // TODO: HTTP service implementations for production
     ];
+
+function initAuth(auth: AuthService) {
+  return () => auth.loadSession();
+}
 
 @NgModule({
   declarations: [AppComponent],
@@ -34,6 +42,13 @@ const serviceProviders = environment.useMocks
   providers: [
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
     ...serviceProviders,
+    provideHttpClient(withInterceptors([authInterceptor, errorInterceptor])),
+    {
+      provide: APP_INITIALIZER,
+      useFactory: initAuth,
+      deps: [AuthService],
+      multi: true,
+    },
   ],
   bootstrap: [AppComponent],
 })

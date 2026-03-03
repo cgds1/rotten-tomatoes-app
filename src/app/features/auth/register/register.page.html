@@ -1,0 +1,133 @@
+<ion-content class="auth-content">
+  <div class="auth-container">
+    <div class="auth-header">
+      <h1 class="auth-title font-display">CineRank</h1>
+      <p class="auth-subtitle">Creá tu cuenta y empezá a opinar</p>
+    </div>
+
+    <form [formGroup]="form" (ngSubmit)="onSubmit()">
+      <div class="form-field">
+        <ion-item lines="none" class="auth-input">
+          <ion-input
+            formControlName="name"
+            type="text"
+            label="Nombre"
+            labelPlacement="floating"
+            placeholder="Tu nombre"
+          ></ion-input>
+        </ion-item>
+        <p
+          class="field-error"
+          *ngIf="form.get('name')?.touched && form.get('name')?.hasError('required')"
+        >
+          El nombre es obligatorio
+        </p>
+        <p
+          class="field-error"
+          *ngIf="form.get('name')?.touched && form.get('name')?.hasError('minlength')"
+        >
+          Mínimo 2 caracteres
+        </p>
+      </div>
+
+      <div class="form-field">
+        <ion-item lines="none" class="auth-input">
+          <ion-input
+            formControlName="email"
+            type="email"
+            label="Email"
+            labelPlacement="floating"
+            placeholder="tu@email.com"
+          ></ion-input>
+        </ion-item>
+        <p
+          class="field-error"
+          *ngIf="form.get('email')?.touched && form.get('email')?.hasError('required')"
+        >
+          El email es obligatorio
+        </p>
+        <p
+          class="field-error"
+          *ngIf="form.get('email')?.touched && form.get('email')?.hasError('email')"
+        >
+          Ingresá un email válido
+        </p>
+      </div>
+
+      <div class="form-field">
+        <ion-item lines="none" class="auth-input">
+          <ion-input
+            formControlName="password"
+            type="password"
+            label="Contraseña"
+            labelPlacement="floating"
+            placeholder="Mínimo 6 caracteres"
+          ></ion-input>
+        </ion-item>
+        <p
+          class="field-error"
+          *ngIf="
+            form.get('password')?.touched &&
+            form.get('password')?.hasError('required')
+          "
+        >
+          La contraseña es obligatoria
+        </p>
+        <p
+          class="field-error"
+          *ngIf="
+            form.get('password')?.touched &&
+            form.get('password')?.hasError('minlength')
+          "
+        >
+          Mínimo 6 caracteres
+        </p>
+      </div>
+
+      <div class="form-field">
+        <ion-item lines="none" class="auth-input">
+          <ion-input
+            formControlName="confirmPassword"
+            type="password"
+            label="Confirmar contraseña"
+            labelPlacement="floating"
+            placeholder="Repetí tu contraseña"
+          ></ion-input>
+        </ion-item>
+        <p
+          class="field-error"
+          *ngIf="
+            form.get('confirmPassword')?.touched &&
+            form.get('confirmPassword')?.hasError('required')
+          "
+        >
+          Confirmá tu contraseña
+        </p>
+        <p
+          class="field-error"
+          *ngIf="
+            form.get('confirmPassword')?.touched &&
+            form.get('confirmPassword')?.hasError('passwordMismatch')
+          "
+        >
+          Las contraseñas no coinciden
+        </p>
+      </div>
+
+      <ion-button
+        expand="block"
+        type="submit"
+        class="auth-btn"
+        [disabled]="loading"
+      >
+        <ion-spinner *ngIf="loading" name="crescent" class="btn-spinner"></ion-spinner>
+        <span *ngIf="!loading">Crear cuenta</span>
+      </ion-button>
+    </form>
+
+    <p class="auth-link">
+      ¿Ya tenés cuenta?
+      <a routerLink="/auth/login">Iniciá sesión</a>
+    </p>
+  </div>
+</ion-content>

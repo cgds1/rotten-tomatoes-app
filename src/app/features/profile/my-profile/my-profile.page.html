@@ -5,5 +5,19 @@
 </ion-header>
 
 <ion-content class="ion-padding">
-  <p class="font-body" style="color: var(--text-secondary)">Próximamente: perfil de usuario</p>
+  <div class="profile-container">
+    <p class="font-body" style="color: var(--text-secondary)">
+      Próximamente: perfil de usuario
+    </p>
+
+    <ion-button
+      expand="block"
+      color="danger"
+      class="logout-btn"
+      (click)="logout()"
+    >
+      <ion-icon slot="start" name="log-out-outline"></ion-icon>
+      Cerrar sesión
+    </ion-button>
+  </div>
 </ion-content>
