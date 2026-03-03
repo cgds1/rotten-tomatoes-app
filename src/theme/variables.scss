@@ -1,2 +1,107 @@
-// For information on how to create your own theme, please refer to:
-// https://ionicframework.com/docs/theming/
+// Cineteca Editorial — Design System Tokens
+// ===========================================
+
+:root {
+  // Background
+  --bg-primary: #0D0D0D;
+  --bg-card: #1A1A1A;
+  --bg-elevated: #242424;
+
+  // Text
+  --text-primary: #E8E8E0;
+  --text-secondary: #8A8A80;
+
+  // Semantic colors
+  --color-critic: #C8A96E;
+  --color-user: #6E9CC8;
+  --color-accent: #FF3D2E;
+  --color-success: #4CAF50;
+  --color-danger: #FF3D2E;
+
+  // Ionic overrides — force dark mode
+  --ion-background-color: var(--bg-primary);
+  --ion-background-color-rgb: 13, 13, 13;
+  --ion-text-color: var(--text-primary);
+  --ion-text-color-rgb: 232, 232, 224;
+
+  --ion-color-primary: var(--color-critic);
+  --ion-color-primary-rgb: 200, 169, 110;
+  --ion-color-primary-contrast: #0D0D0D;
+  --ion-color-primary-contrast-rgb: 13, 13, 13;
+  --ion-color-primary-shade: #b09562;
+  --ion-color-primary-tint: #ceb27d;
+
+  --ion-color-secondary: var(--color-user);
+  --ion-color-secondary-rgb: 110, 156, 200;
+  --ion-color-secondary-contrast: #0D0D0D;
+  --ion-color-secondary-contrast-rgb: 13, 13, 13;
+  --ion-color-secondary-shade: #6189b0;
+  --ion-color-secondary-tint: #7da6ce;
+
+  --ion-color-danger: var(--color-danger);
+  --ion-color-danger-rgb: 255, 61, 46;
+  --ion-color-danger-contrast: #ffffff;
+  --ion-color-danger-contrast-rgb: 255, 255, 255;
+  --ion-color-danger-shade: #e03628;
+  --ion-color-danger-tint: #ff5043;
+
+  --ion-color-success: var(--color-success);
+  --ion-color-success-rgb: 76, 175, 80;
+  --ion-color-success-contrast: #000000;
+  --ion-color-success-contrast-rgb: 0, 0, 0;
+  --ion-color-success-shade: #439a47;
+  --ion-color-success-tint: #5eb762;
+
+  // Card overrides
+  --ion-card-background: var(--bg-card);
+
+  // Toolbar overrides
+  --ion-toolbar-background: var(--bg-primary);
+  --ion-toolbar-color: var(--text-primary);
+
+  // Tab bar overrides
+  --ion-tab-bar-background: var(--bg-card);
+  --ion-tab-bar-color: var(--text-secondary);
+  --ion-tab-bar-color-selected: var(--color-critic);
+
+  // Item overrides
+  --ion-item-background: transparent;
+  --ion-item-color: var(--text-primary);
+}
+
+// Component overrides
+ion-card {
+  --background: var(--bg-card);
+  --color: var(--text-primary);
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+ion-toolbar {
+  --background: var(--bg-primary);
+  --color: var(--text-primary);
+  --border-color: var(--bg-elevated);
+}
+
+ion-chip {
+  --background: var(--bg-elevated);
+  --color: var(--text-primary);
+}
+
+ion-segment {
+  --background: var(--bg-card);
+}
+
+ion-segment-button {
+  --color: var(--text-secondary);
+  --color-checked: var(--color-critic);
+  --indicator-color: var(--color-critic);
+}
+
+ion-button {
+  --border-radius: 8px;
+  font-family: 'Inter', sans-serif;
+  font-weight: 600;
+  text-transform: none;
+  letter-spacing: 0.3px;
+}

@@ -1,0 +1,95 @@
+<ion-content [fullscreen]="true" [scrollY]="false" class="onboarding-content">
+  <div class="onboarding-wrapper">
+    <swiper-container #swiperRef init="false">
+      <!-- Slide 1: Descubrí cine -->
+      <swiper-slide>
+        <div class="slide slide-1">
+          <div class="slide-icon">
+            <ion-icon name="film-outline"></ion-icon>
+          </div>
+          <h1 class="font-display slide-title">Descubrí cine</h1>
+          <p class="font-body slide-subtitle">
+            Explorá películas, leé críticas y encontrá tu próxima favorita.
+          </p>
+        </div>
+      </swiper-slide>
+
+      <!-- Slide 2: Opiná y calificá -->
+      <swiper-slide>
+        <div class="slide slide-2">
+          <div class="slide-icon">
+            <ion-icon name="star-outline"></ion-icon>
+          </div>
+          <h1 class="font-display slide-title">Opiná y calificá</h1>
+          <p class="font-body slide-subtitle">
+            Tu puntuación cuenta. Compará tu opinión con la de los críticos.
+          </p>
+          <div class="rating-preview">
+            <div class="rating-box">
+              <span class="rating-label font-body">Usuarios</span>
+              <span class="rating-user font-mono">8.4</span>
+            </div>
+            <div class="rating-divider"></div>
+            <div class="rating-box">
+              <span class="rating-label font-body">Críticos</span>
+              <span class="rating-critic font-mono">7.2</span>
+            </div>
+          </div>
+        </div>
+      </swiper-slide>
+
+      <!-- Slide 3: Tu voz importa -->
+      <swiper-slide>
+        <div class="slide slide-3">
+          <div class="slide-icon">
+            <ion-icon name="chatbubbles-outline"></ion-icon>
+          </div>
+          <h1 class="font-display slide-title">Tu voz importa</h1>
+          <p class="font-body slide-subtitle">
+            Usuarios y críticos: dos perspectivas, una comunidad.
+          </p>
+          <div class="roles-preview">
+            <div class="role-badge role-user">
+              <ion-icon name="person-outline"></ion-icon>
+              <span class="font-body">Usuario</span>
+            </div>
+            <div class="role-badge role-critic">
+              <ion-icon name="ribbon-outline"></ion-icon>
+              <span class="font-body">Crítico</span>
+            </div>
+          </div>
+        </div>
+      </swiper-slide>
+    </swiper-container>
+
+    <!-- Custom dot indicators -->
+    <div class="dots">
+      <span
+        *ngFor="let dot of [0, 1, 2]"
+        class="dot"
+        [class.active]="dot === currentSlide"
+      ></span>
+    </div>
+
+    <!-- Navigation button -->
+    <div class="onboarding-footer">
+      <ion-button
+        expand="block"
+        (click)="next()"
+        class="onboarding-btn"
+        color="primary"
+      >
+        {{ currentSlide < totalSlides - 1 ? 'Siguiente' : 'Empezar' }}
+      </ion-button>
+
+      <ion-button
+        *ngIf="currentSlide < totalSlides - 1"
+        fill="clear"
+        (click)="start()"
+        class="skip-btn"
+      >
+        Omitir
+      </ion-button>
+    </div>
+  </div>
+</ion-content>
