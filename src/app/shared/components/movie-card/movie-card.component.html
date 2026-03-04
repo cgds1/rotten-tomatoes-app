@@ -1,0 +1,28 @@
+<div class="movie-card card-reveal">
+  <div class="poster-container">
+    <div class="poster-shimmer skeleton-shimmer" *ngIf="!posterLoaded"></div>
+    <img
+      [src]="displayUrl"
+      [alt]="movie.title"
+      class="poster"
+      [class.loaded]="posterLoaded"
+      (load)="onPosterLoad()"
+      (error)="onPosterError()"
+      loading="lazy"
+    />
+  </div>
+  <div class="card-info">
+    <h3 class="movie-title font-display">{{ movie.title }}</h3>
+    <span class="movie-year font-body">{{ year }}</span>
+    <div class="ratings">
+      <app-rating-badge
+        type="user"
+        [value]="movie.userRating"
+      ></app-rating-badge>
+      <app-rating-badge
+        type="critic"
+        [value]="movie.criticRating"
+      ></app-rating-badge>
+    </div>
+  </div>
+</div>

@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
+import { delay } from 'rxjs/operators';
 import { IMoviesService } from './interfaces/movies-service.interface';
 import { Movie, MovieDetail, MovieFilter, PaginatedResponse } from '../models/movie.model';
 import { MOCK_MOVIES, MockMovieData } from '../mocks/mock-movies';
@@ -61,7 +62,7 @@ export class MoviesMockService implements IMoviesService {
     // Strip cast from list results
     const data: Movie[] = paged.map(({ cast, ...movie }) => movie);
 
-    return of({ data, total, page, limit });
+    return of({ data, total, page, limit }).pipe(delay(150));
   }
 
   searchMovies(query: string): Observable<Movie[]> {
@@ -69,7 +70,7 @@ export class MoviesMockService implements IMoviesService {
     const results = this.movies
       .filter(m => m.title.toLowerCase().includes(q))
       .map(({ cast, ...movie }) => movie);
-    return of(results);
+    return of(results).pipe(delay(150));
   }
 
   getMovieDetail(id: string): Observable<MovieDetail> {

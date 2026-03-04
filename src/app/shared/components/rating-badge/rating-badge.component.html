@@ -1,0 +1,4 @@
+<div class="rating-badge" [class.rating-user]="type === 'user'" [class.rating-critic]="type === 'critic'" [class.no-data]="value === null">
+  <ion-icon [name]="type === 'user' ? 'star' : 'happy'" class="rating-icon"></ion-icon>
+  <span #valueEl class="rating-value font-mono">{{ displayValue }}</span>
+</div>

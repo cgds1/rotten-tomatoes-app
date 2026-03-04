@@ -1,9 +1,80 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title class="font-display">Cartelera</ion-title>
+    <ion-title class="font-display">CineRank</ion-title>
+  </ion-toolbar>
+  <ion-toolbar>
+    <ion-searchbar
+      mode="ios"
+      placeholder="Buscar películas..."
+      (ionInput)="onSearchChange($event)"
+      [debounce]="0"
+      animated
+    ></ion-searchbar>
   </ion-toolbar>
 </ion-header>
 
-<ion-content class="ion-padding">
-  <p class="font-body" style="color: var(--text-secondary)">Próximamente: listado de películas</p>
+<ion-content>
+  <!-- Category chips -->
+  <div class="category-chips">
+    <ion-chip
+      [class.selected]="state.selectedCategory() === null"
+      (click)="selectCategory(null)"
+    >
+      Todas
+    </ion-chip>
+    <ion-chip
+      *ngFor="let cat of state.categories()"
+      [class.selected]="state.selectedCategory() === cat.id"
+      (click)="selectCategory(cat.id)"
+    >
+      {{ cat.name }}
+    </ion-chip>
+  </div>
+
+  <!-- Sorting segment -->
+  <ion-segment [value]="state.filters().sortBy || 'userRating'" (ionChange)="onSortChange($event)" mode="ios">
+    <ion-segment-button value="userRating">
+      <ion-label>Usuarios</ion-label>
+    </ion-segment-button>
+    <ion-segment-button value="criticRating">
+      <ion-label>Críticos</ion-label>
+    </ion-segment-button>
+    <ion-segment-button value="releaseDate">
+      <ion-label>Fecha</ion-label>
+    </ion-segment-button>
+  </ion-segment>
+
+  <!-- Pull to refresh -->
+  <ion-refresher slot="fixed" (ionRefresh)="onRefresh($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+
+  <!-- Loading skeletons -->
+  <ion-grid *ngIf="state.loading() && !state.hasMovies()" class="movies-grid">
+    <ion-row>
+      <ion-col size="6" *ngFor="let i of [1,2,3,4,5,6]">
+        <app-skeleton-card></app-skeleton-card>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+  <!-- Movie grid -->
+  <ion-grid *ngIf="state.hasMovies()" class="movies-grid">
+    <ion-row>
+      <ion-col size="6" *ngFor="let movie of state.movies(); trackBy: trackByMovieId">
+        <app-movie-card [movie]="movie" (click)="openMovie(movie)"></app-movie-card>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+  <!-- Empty state -->
+  <div *ngIf="!state.loading() && !state.hasMovies()" class="empty-state">
+    <ion-icon name="film-outline" class="empty-icon"></ion-icon>
+    <p class="font-body">No se encontraron películas</p>
+  </div>
+
+  <!-- Infinite scroll — destroyed/recreated via *ngIf so Ionic resets internal state -->
+  <ion-infinite-scroll *ngIf="state.hasMore()" (ionInfinite)="onInfiniteScroll($event)" threshold="200px">
+    <ion-infinite-scroll-content loadingSpinner="crescent"></ion-infinite-scroll-content>
+  </ion-infinite-scroll>
 </ion-content>

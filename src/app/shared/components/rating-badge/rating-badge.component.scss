@@ -1,0 +1,45 @@
+.rating-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 8px;
+  border-radius: 8px;
+  font-size: 13px;
+
+  &.rating-user {
+    background: rgba(110, 156, 200, 0.15);
+    color: var(--color-user);
+
+    .rating-icon {
+      color: var(--color-user);
+    }
+  }
+
+  &.rating-critic {
+    background: rgba(200, 169, 110, 0.15);
+    color: var(--color-critic);
+
+    .rating-icon {
+      color: var(--color-critic);
+    }
+  }
+
+  &.no-data {
+    opacity: 0.5;
+
+    .rating-value {
+      color: var(--text-secondary);
+    }
+  }
+}
+
+.rating-icon {
+  font-size: 14px;
+}
+
+.rating-value {
+  font-weight: 700;
+  font-size: 14px;
+  min-width: 28px;
+  text-align: center;
+}

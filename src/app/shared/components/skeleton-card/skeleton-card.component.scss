@@ -1,0 +1,37 @@
+.skeleton-card {
+  background: var(--bg-card);
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.skeleton-poster {
+  width: 100%;
+  aspect-ratio: 2 / 3;
+}
+
+.skeleton-info {
+  padding: 10px;
+}
+
+.skeleton-title {
+  height: 16px;
+  width: 80%;
+  margin-bottom: 6px;
+}
+
+.skeleton-year {
+  height: 12px;
+  width: 40%;
+  margin-bottom: 10px;
+}
+
+.skeleton-ratings {
+  display: flex;
+  gap: 6px;
+}
+
+.skeleton-badge {
+  height: 26px;
+  width: 56px;
+  border-radius: 8px;
+}

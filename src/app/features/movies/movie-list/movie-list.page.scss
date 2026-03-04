@@ -1,0 +1,56 @@
+.category-chips {
+  display: flex;
+  overflow-x: auto;
+  padding: 8px 16px;
+  gap: 8px;
+  -webkit-overflow-scrolling: touch;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+
+  ion-chip {
+    flex-shrink: 0;
+    background: var(--bg-card);
+    color: var(--text-secondary);
+    font-family: 'Inter', sans-serif;
+    font-size: 13px;
+    border: none;
+
+    &.selected {
+      background: var(--color-accent);
+      color: #fff;
+    }
+  }
+}
+
+ion-segment {
+  margin: 0 16px 8px;
+}
+
+.movies-grid {
+  padding: 8px;
+
+  ion-col {
+    padding: 4px;
+  }
+}
+
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 20px;
+  color: var(--text-secondary);
+
+  .empty-icon {
+    font-size: 48px;
+    margin-bottom: 12px;
+    opacity: 0.5;
+  }
+
+  p {
+    font-size: 15px;
+  }
+}

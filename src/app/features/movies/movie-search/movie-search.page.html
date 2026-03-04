@@ -2,8 +2,64 @@
   <ion-toolbar>
     <ion-title class="font-display">Buscar</ion-title>
   </ion-toolbar>
+  <ion-toolbar>
+    <ion-searchbar
+      mode="ios"
+      placeholder="Buscar películas por título..."
+      [value]="query"
+      (ionInput)="onSearchChange($event)"
+      (ionChange)="onSearch()"
+      [debounce]="0"
+      animated
+      autofocus="true"
+    ></ion-searchbar>
+  </ion-toolbar>
 </ion-header>
 
-<ion-content class="ion-padding">
-  <p class="font-body" style="color: var(--text-secondary)">Próximamente: búsqueda de películas</p>
+<ion-content>
+  <!-- Recent searches (shown when no query) -->
+  <div *ngIf="!query && recentSearches.length > 0" class="recent-searches">
+    <p class="section-label font-body">Búsquedas recientes</p>
+    <div class="recent-chips">
+      <ion-chip *ngFor="let term of recentSearches" (click)="searchFromRecent(term)">
+        <ion-icon name="time-outline"></ion-icon>
+        <ion-label>{{ term }}</ion-label>
+        <ion-icon name="close-circle" (click)="removeRecent(term, $event)"></ion-icon>
+      </ion-chip>
+    </div>
+  </div>
+
+  <!-- Empty initial state -->
+  <div *ngIf="!query && recentSearches.length === 0" class="empty-state">
+    <ion-icon name="search-outline" class="empty-icon"></ion-icon>
+    <p class="font-body">Buscá películas por título</p>
+  </div>
+
+  <!-- Loading -->
+  <div *ngIf="loading" class="ion-padding ion-text-center">
+    <ion-spinner name="crescent"></ion-spinner>
+  </div>
+
+  <!-- Results list -->
+  <ion-list *ngIf="searched && !loading && results.length > 0" lines="none">
+    <ion-item *ngFor="let movie of results" (click)="openMovie(movie)" button detail="false">
+      <div class="search-result">
+        <img [src]="movie.posterUrl" [alt]="movie.title" class="result-poster" loading="lazy" />
+        <div class="result-info">
+          <h3 class="result-title font-display">{{ movie.title }}</h3>
+          <span class="result-year font-body">{{ getYear(movie) }}</span>
+          <div class="result-ratings">
+            <app-rating-badge type="user" [value]="movie.userRating"></app-rating-badge>
+            <app-rating-badge type="critic" [value]="movie.criticRating"></app-rating-badge>
+          </div>
+        </div>
+      </div>
+    </ion-item>
+  </ion-list>
+
+  <!-- No results -->
+  <div *ngIf="searched && !loading && results.length === 0" class="empty-state">
+    <ion-icon name="sad-outline" class="empty-icon"></ion-icon>
+    <p class="font-body">No se encontraron resultados para "{{ query }}"</p>
+  </div>
 </ion-content>
