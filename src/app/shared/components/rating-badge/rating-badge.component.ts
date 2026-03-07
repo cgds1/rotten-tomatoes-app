@@ -29,8 +29,8 @@ export class RatingBadgeComponent implements OnChanges {
   constructor(private cdr: ChangeDetectorRef) {}
 
   ngOnChanges(changes: SimpleChanges): void {
-    if (changes['value']) {
-      this.animateValue(changes['value'].previousValue, this.value);
+    if (changes['value'] || (changes['mode'] && this.value === null)) {
+      this.animateValue(changes['value']?.previousValue ?? this.value, this.value);
     }
   }
 

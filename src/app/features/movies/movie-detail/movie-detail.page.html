@@ -9,7 +9,7 @@
 <ion-content *ngIf="!loading && movie" [fullscreen]="true">
   <!-- 1. Header visual -->
   <div class="backdrop-container">
-    <img [src]="movie.backdropUrl" class="backdrop-image" alt="">
+    <img [src]="movie.backdropUrl" class="backdrop-image" alt="" />
     <div class="backdrop-gradient"></div>
 
     <button class="back-button" (click)="goBack()">
@@ -17,7 +17,7 @@
     </button>
 
     <div class="backdrop-overlay-content">
-      <img [src]="movie.posterUrl" class="mini-poster" alt="">
+      <img [src]="movie.posterUrl" class="mini-poster" alt="" />
       <h1 class="movie-title font-display">{{ movie.title }}</h1>
     </div>
   </div>
@@ -29,12 +29,22 @@
         <ion-icon name="star" class="rating-card__icon"></ion-icon>
         <div class="rating-card__info">
           <span class="rating-card__value font-mono">
-            <app-rating-badge type="user" mode="full" [value]="movie.userRatingCount ? movie.userRating : null"></app-rating-badge>
+            <app-rating-badge
+              type="user"
+              mode="full"
+              [value]="movie.userRatingCount ? movie.userRating : null"
+            ></app-rating-badge>
           </span>
-          <span class="rating-card__label">{{ movie.userRatingCount }} reseñas</span>
+          <span class="rating-card__label"
+            >{{ movie.userRatingCount ? movie.userRatingCount + ' reseñas' :
+            'Sin reseñas' }}</span
+          >
         </div>
         <div class="rating-card__bar">
-          <div class="rating-card__bar-fill rating-card__bar-fill--user" [style.width.%]="(movie.userRating || 0) * 10"></div>
+          <div
+            class="rating-card__bar-fill rating-card__bar-fill--user"
+            [style.width.%]="(movie.userRating || 0) * 10"
+          ></div>
         </div>
       </div>
 
@@ -42,12 +52,22 @@
         <ion-icon name="ribbon" class="rating-card__icon"></ion-icon>
         <div class="rating-card__info">
           <span class="rating-card__value font-mono">
-            <app-rating-badge type="critic" mode="full" [value]="movie.criticRatingCount ? movie.criticRating : null"></app-rating-badge>
+            <app-rating-badge
+              type="critic"
+              mode="full"
+              [value]="movie.criticRatingCount ? movie.criticRating : null"
+            ></app-rating-badge>
           </span>
-          <span class="rating-card__label">{{ movie.criticRatingCount }} reseñas</span>
+          <span class="rating-card__label"
+            >{{ movie.criticRatingCount ? movie.criticRatingCount + ' reseñas' :
+            'Sin reseñas' }}</span
+          >
         </div>
         <div class="rating-card__bar">
-          <div class="rating-card__bar-fill rating-card__bar-fill--critic" [style.width.%]="(movie.criticRating || 0) * 10"></div>
+          <div
+            class="rating-card__bar-fill rating-card__bar-fill--critic"
+            [style.width.%]="(movie.criticRating || 0) * 10"
+          ></div>
         </div>
       </div>
     </div>
@@ -78,10 +98,20 @@
       <h2 class="section-title font-display">Reparto</h2>
       <div class="cast-scroll">
         <div class="cast-item" *ngFor="let member of movie.cast">
-          <div class="cast-photo" *ngIf="member.profileUrl && !member.imageError">
-            <img [src]="member.profileUrl" [alt]="member.name" (error)="member.imageError = true">
+          <div
+            class="cast-photo"
+            *ngIf="member.profileUrl && !member.imageError"
+          >
+            <img
+              [src]="member.profileUrl"
+              [alt]="member.name"
+              (error)="member.imageError = true"
+            />
           </div>
-          <div class="cast-photo cast-fallback" *ngIf="!member.profileUrl || member.imageError">
+          <div
+            class="cast-photo cast-fallback"
+            *ngIf="!member.profileUrl || member.imageError"
+          >
             <span>{{ getInitials(member.name) }}</span>
           </div>
           <span class="cast-name">{{ member.name }}</span>
@@ -117,6 +147,8 @@
     <ion-fab-button color="danger" (click)="openCommentForm(userComment)">
       <ion-icon [name]="userComment ? 'pencil' : 'create'"></ion-icon>
     </ion-fab-button>
-    <span class="fab-label">{{ userComment ? 'Editar tu reseña' : 'Escribir reseña' }}</span>
+    <span class="fab-label"
+      >{{ userComment ? 'Editar tu reseña' : 'Escribir reseña' }}</span
+    >
   </ion-fab>
 </ion-content>
