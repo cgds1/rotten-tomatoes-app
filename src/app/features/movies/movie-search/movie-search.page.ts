@@ -1,4 +1,5 @@
 import { Component, Inject, OnInit } from '@angular/core';
+import { ViewWillEnter } from '@ionic/angular';
 import { Router } from '@angular/router';
 import { Subject } from 'rxjs';
 import { debounceTime, distinctUntilChanged, switchMap } from 'rxjs/operators';
@@ -17,7 +18,7 @@ const MAX_RECENT = 5;
   styleUrls: ['movie-search.page.scss'],
   standalone: false,
 })
-export class MovieSearchPage implements OnInit {
+export class MovieSearchPage implements OnInit, ViewWillEnter {
   results: Movie[] = [];
   recentSearches: string[] = [];
   query = '';
@@ -32,9 +33,11 @@ export class MovieSearchPage implements OnInit {
     private router: Router
   ) {}
 
-  ngOnInit(): void {
+  ionViewWillEnter(): void {
     this.loadRecentSearches();
+  }
 
+  ngOnInit(): void {
     this.searchSubject
       .pipe(
         debounceTime(400),
