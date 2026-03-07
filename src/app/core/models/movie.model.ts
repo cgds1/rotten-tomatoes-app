@@ -7,6 +7,7 @@ export interface CastMember {
   name: string;
   character: string;
   profileUrl: string | null;
+  imageError?: boolean;
 }
 
 export interface Movie {

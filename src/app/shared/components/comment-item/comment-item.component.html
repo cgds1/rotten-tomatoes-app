@@ -1,0 +1,28 @@
+<div class="comment-item">
+  <div class="comment-header">
+    <div class="avatar" [style.background-color]="avatarColor">
+      <span>{{ initials }}</span>
+    </div>
+    <div class="comment-meta">
+      <div class="name-row">
+        <span class="user-name">{{ comment.user.name }}</span>
+        <span class="role-badge" [class.role-critic]="comment.user.role === 'CRITIC'" [class.role-user]="comment.user.role === 'USER'">
+          {{ comment.user.role === 'CRITIC' ? 'Crítico' : 'Usuario' }}
+        </span>
+      </div>
+      <span class="comment-date">{{ relativeDate }}</span>
+    </div>
+    <span class="comment-score font-mono">{{ comment.score.toFixed(1) }}</span>
+  </div>
+
+  <p class="comment-text">{{ comment.content }}</p>
+
+  <div class="comment-actions" *ngIf="isOwn">
+    <ion-button fill="clear" size="small" (click)="onEdit.emit(comment)">
+      <ion-icon name="pencil" slot="icon-only"></ion-icon>
+    </ion-button>
+    <ion-button fill="clear" size="small" color="danger" (click)="onDelete.emit(comment)">
+      <ion-icon name="trash" slot="icon-only"></ion-icon>
+    </ion-button>
+  </div>
+</div>

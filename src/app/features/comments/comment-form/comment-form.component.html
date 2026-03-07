@@ -1,0 +1,48 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title class="font-display">{{ isEditMode ? 'Editar reseña' : 'Nueva reseña' }}</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="cancel()">Cancelar</ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <form [formGroup]="form" (ngSubmit)="submit()">
+    <div class="form-section">
+      <label class="form-label">Puntaje</label>
+      <app-star-rating formControlName="score"></app-star-rating>
+      <p class="error-text" *ngIf="form.get('score')?.touched && form.get('score')?.hasError('min')">
+        Selecciona un puntaje
+      </p>
+    </div>
+
+    <div class="form-section">
+      <label class="form-label">Tu reseña</label>
+      <ion-textarea
+        formControlName="content"
+        placeholder="Escribe tu opinión sobre esta película..."
+        [autoGrow]="true"
+        [rows]="5"
+        maxlength="2000"
+        class="content-textarea"
+      ></ion-textarea>
+      <div class="textarea-footer">
+        <p class="error-text" *ngIf="form.get('content')?.touched && form.get('content')?.hasError('minlength')">
+          Mínimo 10 caracteres
+        </p>
+        <span class="char-count font-mono">{{ charCount }} / 2000</span>
+      </div>
+    </div>
+
+    <ion-button
+      expand="block"
+      type="submit"
+      [disabled]="isSubmitting"
+      class="submit-btn"
+    >
+      <ion-spinner *ngIf="isSubmitting" name="crescent" slot="start"></ion-spinner>
+      {{ isSubmitting ? 'Publicando...' : 'Publicar' }}
+    </ion-button>
+  </form>
+</ion-content>

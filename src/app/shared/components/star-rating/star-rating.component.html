@@ -1,0 +1,13 @@
+<div class="star-rating" [class.disabled]="disabled">
+  <div class="stars-row">
+    <ion-icon
+      *ngFor="let star of stars"
+      [name]="star <= value ? 'star' : 'star-outline'"
+      class="star"
+      [class.filled]="star <= value"
+      [class.bounce]="star === selectedStar"
+      (click)="selectStar(star)"
+    ></ion-icon>
+  </div>
+  <span class="score-display font-mono" *ngIf="value > 0">{{ value }} / 10</span>
+</div>
