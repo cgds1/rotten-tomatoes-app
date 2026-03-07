@@ -26,7 +26,7 @@
   &--user &__icon { color: var(--color-user); }
   &--critic &__icon { color: var(--color-critic); }
   &__info { display: flex; flex-direction: column; gap: 4px; margin-bottom: 10px; }
-  &__value { font-size: 18px; }
+  &__value { font-size: 32px; font-weight: 700; }
   &__label { font-size: 12px; color: var(--text-secondary); }
   &__bar { height: 4px; background: var(--bg-elevated); border-radius: 2px; overflow: hidden; }
   &__bar-fill { height: 100%; border-radius: 2px; transition: width 0.8s cubic-bezier(0.22,1,0.36,1);
@@ -41,7 +41,9 @@
 .synopsis-text {
   font-size: 14px; line-height: 1.6; color: var(--text-primary); margin: 0 0 8px;
   display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden;
-  &.expanded { -webkit-line-clamp: unset; overflow: visible; }
+  max-height: 4.8em;
+  transition: max-height 0.3s ease;
+  &.expanded { -webkit-line-clamp: unset; overflow: visible; max-height: 50em; }
 }
 .synopsis-toggle { background: none; border: none; color: var(--color-critic); font-size: 13px; font-weight: 600; cursor: pointer; padding: 0; }
 .synopsis-section { margin-bottom: 24px; }
@@ -61,6 +63,14 @@
 }
 .cast-name { font-size: 12px; font-weight: 600; color: var(--text-primary); text-align: center; }
 .cast-character { font-size: 11px; color: var(--text-secondary); text-align: center; }
+
+.fab-label {
+  position: absolute; bottom: 64px; right: 0;
+  background: var(--bg-elevated); color: var(--text-primary);
+  font-size: 12px; font-weight: 600; padding: 4px 10px;
+  border-radius: 6px; white-space: nowrap;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+}
 
 .comments-section { margin-bottom: 80px; }
 .empty-comments { text-align: center; padding: 40px 0; color: var(--text-secondary);

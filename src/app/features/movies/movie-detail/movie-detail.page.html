@@ -29,7 +29,7 @@
         <ion-icon name="star" class="rating-card__icon"></ion-icon>
         <div class="rating-card__info">
           <span class="rating-card__value font-mono">
-            <app-rating-badge type="user" [value]="movie.userRating || null"></app-rating-badge>
+            <app-rating-badge type="user" mode="full" [value]="movie.userRatingCount ? movie.userRating : null"></app-rating-badge>
           </span>
           <span class="rating-card__label">{{ movie.userRatingCount }} reseñas</span>
         </div>
@@ -39,10 +39,10 @@
       </div>
 
       <div class="rating-card rating-card--critic">
-        <ion-icon name="happy" class="rating-card__icon"></ion-icon>
+        <ion-icon name="ribbon" class="rating-card__icon"></ion-icon>
         <div class="rating-card__info">
           <span class="rating-card__value font-mono">
-            <app-rating-badge type="critic" [value]="movie.criticRating || null"></app-rating-badge>
+            <app-rating-badge type="critic" mode="full" [value]="movie.criticRatingCount ? movie.criticRating : null"></app-rating-badge>
           </span>
           <span class="rating-card__label">{{ movie.criticRatingCount }} reseñas</span>
         </div>
@@ -117,5 +117,6 @@
     <ion-fab-button color="danger" (click)="openCommentForm(userComment)">
       <ion-icon [name]="userComment ? 'pencil' : 'create'"></ion-icon>
     </ion-fab-button>
+    <span class="fab-label">{{ userComment ? 'Editar tu reseña' : 'Escribir reseña' }}</span>
   </ion-fab>
 </ion-content>

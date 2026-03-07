@@ -8,8 +8,8 @@ import { AuthService } from './auth.service';
 
 @Injectable({ providedIn: 'root' })
 export class CommentsMockService implements ICommentsService {
-  private comments: Comment[] = MOCK_COMMENTS;
-  private movies: MockMovieData[] = MOCK_MOVIES;
+  private comments: Comment[] = [...MOCK_COMMENTS];
+  private movies: MockMovieData[] = MOCK_MOVIES.map(m => ({ ...m }));
 
   constructor(private authService: AuthService) {}
 

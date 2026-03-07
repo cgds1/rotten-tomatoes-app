@@ -27,6 +27,7 @@ export class MoviesState {
   readonly categories = this._categories.asReadonly();
   readonly selectedCategory = this._selectedCategory.asReadonly();
   readonly total = this._total.asReadonly();
+  readonly filteredMovies = computed(() => this._movies());
   readonly hasMovies = computed(() => this._movies().length > 0);
   readonly hasMore = computed(() => this._movies().length < this._total());
 

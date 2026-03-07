@@ -8,7 +8,26 @@ import { MOCK_COMMENTS } from '../mocks/mock-comments';
 
 @Injectable({ providedIn: 'root' })
 export class MoviesMockService implements IMoviesService {
-  private movies: MockMovieData[] = [...MOCK_MOVIES];
+  private movies: MockMovieData[] = MOCK_MOVIES.map(m => ({ ...m }));
+
+  constructor() {
+    this.recalculateAllRatings();
+  }
+
+  private recalculateAllRatings(): void {
+    for (const movie of this.movies) {
+      const comments = MOCK_COMMENTS.filter(c => c.movieId === movie.id);
+      const userScores = comments.filter(c => c.user.role === 'USER').map(c => c.score);
+      const criticScores = comments.filter(c => c.user.role === 'CRITIC').map(c => c.score);
+
+      if (userScores.length > 0) {
+        movie.userRating = Math.round((userScores.reduce((a, b) => a + b, 0) / userScores.length) * 10) / 10;
+      }
+      if (criticScores.length > 0) {
+        movie.criticRating = Math.round((criticScores.reduce((a, b) => a + b, 0) / criticScores.length) * 10) / 10;
+      }
+    }
+  }
 
   getMovies(filters: MovieFilter): Observable<PaginatedResponse<Movie>> {
     let result = [...this.movies];
@@ -83,9 +102,18 @@ export class MoviesMockService implements IMoviesService {
     const userComments = comments.filter(c => c.user.role === 'USER');
     const criticComments = comments.filter(c => c.user.role === 'CRITIC');
 
+    const userScores = userComments.map(c => c.score);
+    const criticScores = criticComments.map(c => c.score);
+
     const detail: MovieDetail = {
       ...movie,
       comments,
+      userRating: userScores.length > 0
+        ? Math.round((userScores.reduce((a, b) => a + b, 0) / userScores.length) * 10) / 10
+        : 0,
+      criticRating: criticScores.length > 0
+        ? Math.round((criticScores.reduce((a, b) => a + b, 0) / criticScores.length) * 10) / 10
+        : 0,
       userRatingCount: userComments.length,
       criticRatingCount: criticComments.length,
     };

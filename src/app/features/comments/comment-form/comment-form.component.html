@@ -31,6 +31,9 @@
         <p class="error-text" *ngIf="form.get('content')?.touched && form.get('content')?.hasError('minlength')">
           Mínimo 10 caracteres
         </p>
+        <p class="error-text" *ngIf="form.get('content')?.touched && form.get('content')?.hasError('maxlength')">
+          Máximo 2000 caracteres
+        </p>
         <span class="char-count font-mono">{{ charCount }} / 2000</span>
       </div>
     </div>
@@ -38,7 +41,7 @@
     <ion-button
       expand="block"
       type="submit"
-      [disabled]="isSubmitting"
+      [disabled]="isSubmitting || form.invalid"
       class="submit-btn"
     >
       <ion-spinner *ngIf="isSubmitting" name="crescent" slot="start"></ion-spinner>

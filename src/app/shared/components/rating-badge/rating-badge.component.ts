@@ -4,6 +4,7 @@ import {
   OnChanges,
   SimpleChanges,
   ChangeDetectionStrategy,
+  ChangeDetectorRef,
   ElementRef,
   ViewChild,
 } from '@angular/core';
@@ -18,11 +19,14 @@ import {
 export class RatingBadgeComponent implements OnChanges {
   @Input() type: 'user' | 'critic' = 'user';
   @Input() value: number | null = null;
+  @Input() mode: 'compact' | 'full' = 'compact';
 
-  displayValue = '—';
+  displayValue = 'S/C';
   private animationFrame: number | null = null;
 
   @ViewChild('valueEl', { static: false }) valueEl!: ElementRef<HTMLSpanElement>;
+
+  constructor(private cdr: ChangeDetectorRef) {}
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['value']) {
@@ -36,7 +40,8 @@ export class RatingBadgeComponent implements OnChanges {
     }
 
     if (to === null || to === undefined) {
-      this.displayValue = '—';
+      this.displayValue = this.mode === 'full' ? 'Sin calificar' : 'S/C';
+      this.cdr.detectChanges();
       return;
     }
 
@@ -52,6 +57,7 @@ export class RatingBadgeComponent implements OnChanges {
       const eased = 1 - Math.pow(1 - progress, 3);
       const current = startVal + (endVal - startVal) * eased;
       this.displayValue = current.toFixed(1);
+      this.cdr.detectChanges();
 
       if (progress < 1) {
         this.animationFrame = requestAnimationFrame(animate);

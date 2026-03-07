@@ -181,7 +181,7 @@ export class MovieDetailPage implements OnInit {
   }
 
   private async deleteComment(comment: Comment): Promise<void> {
-    // Optimistic: remove immediately
+    const originalIndex = this.comments.findIndex(c => c.id === comment.id);
     this.comments = this.comments.filter(c => c.id !== comment.id);
     this.recalculateLocalRatings();
 
@@ -190,8 +190,9 @@ export class MovieDetailPage implements OnInit {
         await this.showToast('Reseña eliminada', 'success');
       },
       error: async () => {
-        // Revert
-        this.comments = [...this.comments, comment];
+        const restored = [...this.comments];
+        restored.splice(originalIndex, 0, comment);
+        this.comments = restored;
         this.recalculateLocalRatings();
         await this.showToast('Error al eliminar la reseña', 'danger');
       },
