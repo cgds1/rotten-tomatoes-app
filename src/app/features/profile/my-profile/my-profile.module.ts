@@ -10,7 +10,16 @@ import { SharedModule } from '../../../shared/shared.module';
     CommonModule,
     IonicModule,
     SharedModule,
-    RouterModule.forChild([{ path: '', component: MyProfilePage }]),
+    RouterModule.forChild([
+      { path: '', component: MyProfilePage },
+      {
+        path: 'edit',
+        loadChildren: () =>
+          import('../edit-profile/edit-profile.module').then(
+            (m) => m.EditProfilePageModule
+          ),
+      },
+    ]),
   ],
   declarations: [MyProfilePage],
 })

@@ -168,3 +168,11 @@ body {
 .fade-in {
   animation: fadeIn 0.3s ease forwards;
 }
+
+// ===========================================
+// Alert Danger Button
+// ===========================================
+
+.alert-danger-button {
+  color: var(--color-danger, #FF3D2E) !important;
+}

@@ -6,6 +6,7 @@ import { MOCK_USERS, MockUser } from '../mocks/mock-users';
 @Injectable({ providedIn: 'root' })
 export class AuthMockService implements IAuthService {
   private users: MockUser[] = [...MOCK_USERS];
+  private nextId = MOCK_USERS.length + 1;
   private currentUser: User | null = null;
   private currentToken: string | null = null;
 
@@ -33,7 +34,7 @@ export class AuthMockService implements IAuthService {
     }
 
     const newUser: MockUser = {
-      id: `u${this.users.length + 1}`,
+      id: `u${this.nextId++}`,
       email: data.email,
       name: data.name,
       role: 'USER',
@@ -71,5 +72,34 @@ export class AuthMockService implements IAuthService {
       throw new Error('No hay sesión activa');
     }
     return this.currentUser;
+  }
+
+  async updateProfile(data: { name: string; email: string }): Promise<User> {
+    if (!this.currentUser) {
+      throw new Error('No hay sesión activa');
+    }
+
+    const mockUser = this.users.find(u => u.id === this.currentUser!.id);
+    if (mockUser) {
+      mockUser.name = data.name;
+      mockUser.email = data.email;
+    }
+
+    this.currentUser = { ...this.currentUser, name: data.name, email: data.email };
+    return this.currentUser;
+  }
+
+  async deleteAccount(): Promise<void> {
+    if (!this.currentUser) {
+      throw new Error('No hay sesión activa');
+    }
+
+    const index = this.users.findIndex(u => u.id === this.currentUser!.id);
+    if (index !== -1) {
+      this.users.splice(index, 1);
+    }
+
+    this.currentUser = null;
+    this.currentToken = null;
   }
 }

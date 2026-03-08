@@ -30,6 +30,11 @@ export class CommentsMockService implements ICommentsService {
     return of(result).pipe(delay(MOCK_DELAY));
   }
 
+  getByUser(userId: string): Observable<Comment[]> {
+    const result = this.comments.filter(c => c.user.id === userId);
+    return of(result).pipe(delay(MOCK_DELAY));
+  }
+
   create(movieId: string, data: CreateCommentRequest): Observable<Comment> {
     const user = this.authService.currentUser;
     if (!user) {

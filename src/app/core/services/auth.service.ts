@@ -3,7 +3,7 @@ import { BehaviorSubject, Observable, map } from 'rxjs';
 import { User } from '../models/user.model';
 import { StorageService } from './storage.service';
 import { AUTH_SERVICE } from './service-tokens';
-import { IAuthService } from './interfaces/auth-service.interface';
+import { IAuthService, UpdateProfileRequest } from './interfaces/auth-service.interface';
 
 const TOKEN_KEY = 'auth_token';
 const REFRESH_TOKEN_KEY = 'auth_refresh_token';
@@ -72,6 +72,20 @@ export class AuthService {
       await this.logout();
       return null;
     }
+  }
+
+  async updateProfile(data: UpdateProfileRequest): Promise<void> {
+    const updatedUser = await this.authBackend.updateProfile(data);
+    await this.storage.set(USER_KEY, updatedUser);
+    this.userSubject.next(updatedUser);
+  }
+
+  async deleteAccount(): Promise<void> {
+    await this.authBackend.deleteAccount();
+    await this.storage.remove(TOKEN_KEY);
+    await this.storage.remove(REFRESH_TOKEN_KEY);
+    await this.storage.remove(USER_KEY);
+    this.userSubject.next(null);
   }
 
   private async saveSession(

@@ -1,23 +1,114 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title class="font-display">Perfil</ion-title>
+    <ion-title class="font-display">Mi Perfil</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content class="ion-padding">
-  <div class="profile-container">
-    <p class="font-body" style="color: var(--text-secondary)">
-      Próximamente: perfil de usuario
-    </p>
+  <!-- Skeleton loading -->
+  <app-skeleton-profile *ngIf="loading"></app-skeleton-profile>
 
-    <ion-button
-      expand="block"
-      color="danger"
-      class="logout-btn"
-      (click)="logout()"
+  <!-- Profile content -->
+  <div class="profile-content fade-in" *ngIf="!loading && user">
+    <!-- Avatar -->
+    <div class="profile-avatar" [style.background-color]="avatarColor">
+      <span class="profile-avatar__initials">{{ initials }}</span>
+    </div>
+
+    <!-- User info -->
+    <h2 class="profile-name font-display">{{ user.name }}</h2>
+    <p class="profile-email font-body">{{ user.email }}</p>
+    <span
+      class="profile-role-badge"
+      [class.role-critic]="user.role === 'CRITIC'"
+      [class.role-user]="user.role === 'USER'"
     >
-      <ion-icon slot="start" name="log-out-outline"></ion-icon>
-      Cerrar sesión
-    </ion-button>
+      {{ user.role === 'CRITIC' ? 'Crítico' : 'Usuario' }}
+    </span>
+
+    <!-- Stats -->
+    <div class="profile-stats">
+      <div class="stat-card">
+        <span class="stat-value font-mono">{{ animatedReviewCount }}</span>
+        <span class="stat-label font-body">reseñas escritas</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-value font-mono">{{ animatedAverageScore.toFixed(1) }}</span>
+        <span class="stat-label font-body">puntaje promedio</span>
+      </div>
+    </div>
+
+    <!-- Reviews section -->
+    <div class="profile-section">
+      <h3 class="section-title font-display">Mis reseñas</h3>
+
+      <!-- Empty state -->
+      <app-empty-state
+        *ngIf="reviews.length === 0"
+        icon="chatbubble-ellipses-outline"
+        title="Aún no escribiste reseñas"
+        subtitle="Explorá películas y dejá tu opinión"
+      ></app-empty-state>
+
+      <!-- Review list -->
+      <div
+        class="review-item"
+        *ngFor="let review of reviews"
+        (click)="goToMovie(review.comment.movieId)"
+      >
+        <img
+          class="review-poster"
+          [src]="review.moviePoster"
+          [alt]="review.movieTitle"
+          loading="lazy"
+        />
+        <div class="review-info">
+          <span class="review-title font-body">{{ review.movieTitle }}</span>
+          <span class="review-date font-body">
+            {{ review.comment.createdAt | date:'dd/MM/yyyy' }}
+          </span>
+        </div>
+        <span
+          class="review-score font-mono"
+          [style.color]="getScoreColor(review.comment.score)"
+        >
+          {{ review.comment.score.toFixed(1) }}
+        </span>
+      </div>
+    </div>
+
+    <!-- Action buttons -->
+    <div class="profile-actions">
+      <ion-button
+        expand="block"
+        fill="outline"
+        class="action-btn"
+        (click)="goToEditProfile()"
+      >
+        <ion-icon slot="start" name="create-outline"></ion-icon>
+        Editar perfil
+      </ion-button>
+
+      <ion-button
+        expand="block"
+        color="medium"
+        class="action-btn"
+        (click)="confirmLogout()"
+      >
+        <ion-icon slot="start" name="log-out-outline"></ion-icon>
+        Cerrar sesión
+      </ion-button>
+
+      <ion-button
+        expand="block"
+        fill="clear"
+        color="danger"
+        class="action-btn delete-btn"
+        (click)="confirmDeleteAccount()"
+      >
+        <ion-icon slot="start" name="trash-outline"></ion-icon>
+        Eliminar cuenta
+      </ion-button>
+    </div>
   </div>
 </ion-content>
