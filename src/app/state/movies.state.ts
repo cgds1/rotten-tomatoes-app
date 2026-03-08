@@ -19,6 +19,7 @@ export class MoviesState {
   private _categories = signal<Category[]>(MOCK_CATEGORIES);
   private _selectedCategory = signal<number | null>(null);
   private _total = signal(0);
+  private _error = signal<string | null>(null);
 
   // Computed
   readonly movies = this._movies.asReadonly();
@@ -27,6 +28,7 @@ export class MoviesState {
   readonly categories = this._categories.asReadonly();
   readonly selectedCategory = this._selectedCategory.asReadonly();
   readonly total = this._total.asReadonly();
+  readonly error = this._error.asReadonly();
   readonly filteredMovies = computed(() => this._movies());
   readonly hasMovies = computed(() => this._movies().length > 0);
   readonly hasMore = computed(() => this._movies().length < this._total());
@@ -37,6 +39,7 @@ export class MoviesState {
 
   async loadMovies(): Promise<void> {
     this._loading.set(true);
+    this._error.set(null);
     try {
       const filters: MovieFilter = {
         ...this._filters(),
@@ -51,6 +54,8 @@ export class MoviesState {
       this._movies.set(response.data);
       this._total.set(response.total);
       this._filters.update(f => ({ ...f, page: 1 }));
+    } catch {
+      this._error.set('Error al cargar películas');
     } finally {
       this._loading.set(false);
     }

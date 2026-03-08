@@ -1,9 +1,8 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { ViewWillEnter } from '@ionic/angular';
 import { Router } from '@angular/router';
-import { Subject } from 'rxjs';
-import { debounceTime, distinctUntilChanged, switchMap } from 'rxjs/operators';
-import { of } from 'rxjs';
+import { Subject, of, EMPTY } from 'rxjs';
+import { debounceTime, distinctUntilChanged, switchMap, catchError } from 'rxjs/operators';
 import { Movie } from '../../../core/models/movie.model';
 import { IMoviesService } from '../../../core/services/interfaces/movies-service.interface';
 import { MOVIES_SERVICE } from '../../../core/services/service-tokens';
@@ -24,6 +23,7 @@ export class MovieSearchPage implements OnInit, ViewWillEnter {
   query = '';
   searched = false;
   loading = false;
+  error: string | null = null;
 
   private searchSubject = new Subject<string>();
 
@@ -46,11 +46,19 @@ export class MovieSearchPage implements OnInit, ViewWillEnter {
           if (!query.trim()) {
             this.searched = false;
             this.loading = false;
+            this.error = null;
             return of([]);
           }
           this.loading = true;
           this.searched = true;
-          return this.moviesService.searchMovies(query);
+          this.error = null;
+          return this.moviesService.searchMovies(query).pipe(
+            catchError(() => {
+              this.error = 'Error en la búsqueda';
+              this.loading = false;
+              return of([]);
+            })
+          );
         })
       )
       .subscribe(results => {
@@ -73,6 +81,12 @@ export class MovieSearchPage implements OnInit, ViewWillEnter {
   async onSearch(): Promise<void> {
     if (this.query.trim()) {
       await this.saveRecentSearch(this.query.trim());
+    }
+  }
+
+  retrySearch(): void {
+    if (this.query.trim()) {
+      this.searchSubject.next(this.query);
     }
   }
 

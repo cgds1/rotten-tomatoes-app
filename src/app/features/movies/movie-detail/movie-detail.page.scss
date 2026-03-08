@@ -1,5 +1,3 @@
-.loading-container { display: flex; align-items: center; justify-content: center; height: 100%; }
-
 .backdrop-container { position: relative; width: 100%; height: 60vh; overflow: hidden; }
 .backdrop-image { width: 100%; height: 100%; object-fit: cover; }
 .backdrop-gradient { position: absolute; inset: 0; background: linear-gradient(to bottom, #0D0D0D 0%, transparent 30%, #0D0D0D 100%); }
@@ -11,6 +9,13 @@
   border: none; color: var(--text-primary); font-size: 20px;
   display: flex; align-items: center; justify-content: center; cursor: pointer;
   margin-top: var(--ion-safe-area-top, 0);
+
+  &--static {
+    position: relative; top: auto; left: auto;
+    margin: 16px 0 0 16px;
+    margin-top: calc(16px + var(--ion-safe-area-top, 0));
+    background: var(--bg-card);
+  }
 }
 
 .backdrop-overlay-content { position: absolute; bottom: 0; left: 0; right: 0; padding: 16px; display: flex; align-items: flex-end; gap: 16px; z-index: 5; }
@@ -73,7 +78,3 @@
 }
 
 .comments-section { margin-bottom: 80px; }
-.empty-comments { text-align: center; padding: 40px 0; color: var(--text-secondary);
-  .empty-icon { font-size: 48px; margin-bottom: 12px; }
-  p { font-size: 14px; margin: 0; }
-}

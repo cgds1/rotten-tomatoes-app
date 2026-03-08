@@ -1,0 +1,14 @@
+<div class="empty-state-container slide-up-fade">
+  <ion-icon [name]="icon" class="empty-state__icon"></ion-icon>
+  <h3 class="empty-state__title font-display">{{ title }}</h3>
+  <p class="empty-state__subtitle font-body">{{ subtitle }}</p>
+  <ion-button
+    *ngIf="actionLabel"
+    class="empty-state__action"
+    fill="solid"
+    color="danger"
+    (click)="onAction()"
+  >
+    {{ actionLabel }}
+  </ion-button>
+</div>

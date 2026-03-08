@@ -1,0 +1,25 @@
+.error-state-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 24px;
+  text-align: center;
+}
+
+.error-state__icon {
+  font-size: 64px;
+  color: var(--color-danger);
+  margin-bottom: 16px;
+}
+
+.error-state__message {
+  font-size: 15px;
+  color: var(--text-primary);
+  margin: 0 0 20px;
+  line-height: 1.5;
+}
+
+.error-state__retry {
+  margin-top: 4px;
+}

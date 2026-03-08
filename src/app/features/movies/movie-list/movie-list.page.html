@@ -58,6 +58,13 @@
     </ion-row>
   </ion-grid>
 
+  <!-- Error state -->
+  <app-error-state
+    *ngIf="!state.loading() && state.error()"
+    [message]="state.error()!"
+    (retry)="state.loadMovies()"
+  ></app-error-state>
+
   <!-- Movie grid -->
   <ion-grid *ngIf="state.hasMovies()" class="movies-grid">
     <ion-row>
@@ -68,12 +75,14 @@
   </ion-grid>
 
   <!-- Empty state -->
-  <div *ngIf="!state.loading() && !state.hasMovies()" class="empty-state">
-    <ion-icon name="film-outline" class="empty-icon"></ion-icon>
-    <p class="font-body">No se encontraron películas</p>
-  </div>
+  <app-empty-state
+    *ngIf="!state.loading() && !state.error() && !state.hasMovies()"
+    icon="film-outline"
+    title="No hay películas"
+    subtitle="Intentá con otros filtros o categorías"
+  ></app-empty-state>
 
-  <!-- Infinite scroll — destroyed/recreated via *ngIf so Ionic resets internal state -->
+  <!-- Infinite scroll -->
   <ion-infinite-scroll *ngIf="state.hasMore()" (ionInfinite)="onInfiniteScroll($event)" threshold="200px">
     <ion-infinite-scroll-content loadingSpinner="crescent"></ion-infinite-scroll-content>
   </ion-infinite-scroll>

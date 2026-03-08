@@ -1,12 +1,21 @@
-<!-- Loading state -->
-<ion-content *ngIf="loading">
-  <div class="loading-container">
-    <ion-spinner name="crescent" color="primary"></ion-spinner>
-  </div>
+<!-- Loading state — skeleton -->
+<ion-content *ngIf="loading" [fullscreen]="true">
+  <app-skeleton-detail></app-skeleton-detail>
+</ion-content>
+
+<!-- Error state -->
+<ion-content *ngIf="!loading && error">
+  <button class="back-button back-button--static" (click)="goBack()">
+    <ion-icon name="arrow-back"></ion-icon>
+  </button>
+  <app-error-state
+    [message]="error"
+    (retry)="retryLoad()"
+  ></app-error-state>
 </ion-content>
 
 <!-- Movie Detail -->
-<ion-content *ngIf="!loading && movie" [fullscreen]="true">
+<ion-content *ngIf="!loading && !error && movie" [fullscreen]="true">
   <!-- 1. Header visual -->
   <div class="backdrop-container">
     <img [src]="movie.backdropUrl" class="backdrop-image" alt="" />
@@ -127,11 +136,29 @@
         <ion-badge color="medium">{{ comments.length }}</ion-badge>
       </h2>
 
-      <div *ngIf="comments.length === 0" class="empty-comments">
-        <ion-icon name="chatbubble-outline" class="empty-icon"></ion-icon>
-        <p>Sé el primero en opinar</p>
+      <!-- Comments loading -->
+      <div *ngIf="commentsLoading">
+        <app-skeleton-comment *ngFor="let i of [1,2,3]"></app-skeleton-comment>
       </div>
 
+      <!-- Comments error -->
+      <app-error-state
+        *ngIf="!commentsLoading && commentsError"
+        [message]="commentsError"
+        (retry)="loadComments()"
+      ></app-error-state>
+
+      <!-- Comments empty -->
+      <app-empty-state
+        *ngIf="!commentsLoading && !commentsError && comments.length === 0"
+        icon="chatbubble-outline"
+        title="Sé el primero en opinar"
+        subtitle="Compartí tu opinión sobre esta película"
+        actionLabel="Escribir reseña"
+        (action)="openCommentForm()"
+      ></app-empty-state>
+
+      <!-- Comments list -->
       <app-comment-item
         *ngFor="let comment of comments; trackBy: trackByCommentId"
         [comment]="comment"

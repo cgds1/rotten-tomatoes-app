@@ -1,0 +1,99 @@
+.skeleton-detail {
+  width: 100%;
+}
+
+.skeleton-backdrop {
+  width: 100%;
+  height: 60vh;
+}
+
+.skeleton-detail__content {
+  padding: 16px;
+}
+
+.skeleton-detail__title {
+  height: 28px;
+  width: 70%;
+  margin-bottom: 20px;
+}
+
+.skeleton-detail__ratings {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.skeleton-detail__rating-card {
+  flex: 1;
+  height: 120px;
+  border-radius: 12px;
+}
+
+.skeleton-detail__info-row {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.skeleton-detail__info-item {
+  height: 14px;
+  width: 50px;
+}
+
+.skeleton-detail__info-chip {
+  height: 26px;
+  width: 72px;
+  border-radius: 13px;
+}
+
+.skeleton-detail__synopsis {
+  margin-bottom: 24px;
+}
+
+.skeleton-detail__line {
+  height: 14px;
+  margin-bottom: 8px;
+}
+
+.skeleton-detail__cast {
+  margin-bottom: 24px;
+}
+
+.skeleton-detail__section-title {
+  height: 22px;
+  width: 100px;
+  margin-bottom: 16px;
+}
+
+.skeleton-detail__cast-scroll {
+  display: flex;
+  gap: 16px;
+  overflow: hidden;
+}
+
+.skeleton-detail__cast-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 80px;
+  flex-shrink: 0;
+}
+
+.skeleton-detail__cast-photo {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  margin-bottom: 8px;
+}
+
+.skeleton-detail__cast-name {
+  height: 12px;
+  width: 60px;
+  margin-bottom: 4px;
+}
+
+.skeleton-detail__cast-role {
+  height: 10px;
+  width: 50px;
+}

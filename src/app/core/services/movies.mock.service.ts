@@ -1,10 +1,13 @@
 import { Injectable } from '@angular/core';
-import { Observable, of } from 'rxjs';
+import { Observable, of, throwError } from 'rxjs';
 import { delay } from 'rxjs/operators';
 import { IMoviesService } from './interfaces/movies-service.interface';
 import { Movie, MovieDetail, MovieFilter, PaginatedResponse } from '../models/movie.model';
 import { MOCK_MOVIES, MockMovieData } from '../mocks/mock-movies';
 import { MOCK_COMMENTS } from '../mocks/mock-comments';
+import { environment } from '../../../environments/environment';
+
+const MOCK_DELAY = 800;
 
 @Injectable({ providedIn: 'root' })
 export class MoviesMockService implements IMoviesService {
@@ -30,6 +33,14 @@ export class MoviesMockService implements IMoviesService {
   }
 
   getMovies(filters: MovieFilter): Observable<PaginatedResponse<Movie>> {
+    if (environment.mockError) {
+      return throwError(() => new Error('Error simulado')).pipe(delay(MOCK_DELAY));
+    }
+
+    if (environment.mockEmpty) {
+      return of({ data: [], total: 0, page: 1, limit: 10 }).pipe(delay(MOCK_DELAY));
+    }
+
     let result = [...this.movies];
 
     // Filter by search
@@ -81,21 +92,33 @@ export class MoviesMockService implements IMoviesService {
     // Strip cast from list results
     const data: Movie[] = paged.map(({ cast, ...movie }) => movie);
 
-    return of({ data, total, page, limit }).pipe(delay(150));
+    return of({ data, total, page, limit }).pipe(delay(MOCK_DELAY));
   }
 
   searchMovies(query: string): Observable<Movie[]> {
+    if (environment.mockError) {
+      return throwError(() => new Error('Error simulado')).pipe(delay(MOCK_DELAY));
+    }
+
+    if (environment.mockEmpty) {
+      return of([]).pipe(delay(MOCK_DELAY));
+    }
+
     const q = query.toLowerCase();
     const results = this.movies
       .filter(m => m.title.toLowerCase().includes(q))
       .map(({ cast, ...movie }) => movie);
-    return of(results).pipe(delay(150));
+    return of(results).pipe(delay(MOCK_DELAY));
   }
 
   getMovieDetail(id: string): Observable<MovieDetail> {
+    if (environment.mockError) {
+      return throwError(() => new Error('Error simulado')).pipe(delay(MOCK_DELAY));
+    }
+
     const movie = this.movies.find(m => m.id === id);
     if (!movie) {
-      throw new Error(`Película no encontrada: ${id}`);
+      return throwError(() => new Error(`Película no encontrada: ${id}`)).pipe(delay(MOCK_DELAY));
     }
 
     const comments = MOCK_COMMENTS.filter(c => c.movieId === id);
@@ -118,6 +141,6 @@ export class MoviesMockService implements IMoviesService {
       criticRatingCount: criticComments.length,
     };
 
-    return of(detail);
+    return of(detail).pipe(delay(MOCK_DELAY));
   }
 }

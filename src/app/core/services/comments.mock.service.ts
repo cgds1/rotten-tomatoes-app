@@ -1,10 +1,14 @@
 import { Injectable } from '@angular/core';
 import { Observable, of, throwError } from 'rxjs';
+import { delay } from 'rxjs/operators';
 import { ICommentsService } from './interfaces/comments-service.interface';
 import { Comment, CreateCommentRequest, UpdateCommentRequest } from '../models/comment.model';
 import { MOCK_COMMENTS } from '../mocks/mock-comments';
 import { MOCK_MOVIES, MockMovieData } from '../mocks/mock-movies';
 import { AuthService } from './auth.service';
+import { environment } from '../../../environments/environment';
+
+const MOCK_DELAY = 800;
 
 @Injectable({ providedIn: 'root' })
 export class CommentsMockService implements ICommentsService {
@@ -14,8 +18,16 @@ export class CommentsMockService implements ICommentsService {
   constructor(private authService: AuthService) {}
 
   getByMovie(movieId: string): Observable<Comment[]> {
+    if (environment.mockError) {
+      return throwError(() => new Error('Error simulado')).pipe(delay(MOCK_DELAY));
+    }
+
+    if (environment.mockEmpty) {
+      return of([]).pipe(delay(MOCK_DELAY));
+    }
+
     const result = this.comments.filter(c => c.movieId === movieId);
-    return of(result);
+    return of(result).pipe(delay(MOCK_DELAY));
   }
 
   create(movieId: string, data: CreateCommentRequest): Observable<Comment> {
@@ -42,7 +54,7 @@ export class CommentsMockService implements ICommentsService {
 
     this.comments.push(comment);
     this.recalculateRatings(movieId);
-    return of(comment);
+    return of(comment).pipe(delay(MOCK_DELAY));
   }
 
   update(commentId: string, data: UpdateCommentRequest): Observable<Comment> {
@@ -60,7 +72,7 @@ export class CommentsMockService implements ICommentsService {
 
     this.comments[index] = updated;
     this.recalculateRatings(comment.movieId);
-    return of(updated);
+    return of(updated).pipe(delay(MOCK_DELAY));
   }
 
   delete(commentId: string): Observable<void> {
@@ -72,7 +84,7 @@ export class CommentsMockService implements ICommentsService {
     const movieId = this.comments[index].movieId;
     this.comments.splice(index, 1);
     this.recalculateRatings(movieId);
-    return of(void 0);
+    return of(void 0).pipe(delay(MOCK_DELAY));
   }
 
   private recalculateRatings(movieId: string): void {

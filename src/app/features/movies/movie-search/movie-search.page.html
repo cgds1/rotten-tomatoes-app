@@ -30,18 +30,43 @@
   </div>
 
   <!-- Empty initial state -->
-  <div *ngIf="!query && recentSearches.length === 0" class="empty-state">
-    <ion-icon name="search-outline" class="empty-icon"></ion-icon>
-    <p class="font-body">Buscá películas por título</p>
-  </div>
+  <app-empty-state
+    *ngIf="!query && recentSearches.length === 0"
+    icon="search-outline"
+    title="Buscá películas"
+    subtitle="Escribí el título de una película para encontrarla"
+  ></app-empty-state>
 
   <!-- Loading -->
-  <div *ngIf="loading" class="ion-padding ion-text-center">
-    <ion-spinner name="crescent"></ion-spinner>
+  <div *ngIf="loading" class="search-loading">
+    <ion-grid>
+      <ion-row>
+        <ion-col size="12" *ngFor="let i of [1,2,3]">
+          <div class="skeleton-search-result">
+            <div class="skeleton-search-poster skeleton-shimmer"></div>
+            <div class="skeleton-search-info">
+              <div class="skeleton-search-title skeleton-shimmer"></div>
+              <div class="skeleton-search-year skeleton-shimmer"></div>
+              <div class="skeleton-search-ratings">
+                <div class="skeleton-search-badge skeleton-shimmer"></div>
+                <div class="skeleton-search-badge skeleton-shimmer"></div>
+              </div>
+            </div>
+          </div>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
   </div>
 
+  <!-- Error state -->
+  <app-error-state
+    *ngIf="searched && !loading && error"
+    [message]="error"
+    (retry)="retrySearch()"
+  ></app-error-state>
+
   <!-- Results list -->
-  <ion-list *ngIf="searched && !loading && results.length > 0" lines="none">
+  <ion-list *ngIf="searched && !loading && !error && results.length > 0" lines="none">
     <ion-item *ngFor="let movie of results" (click)="openMovie(movie)" button detail="false">
       <div class="search-result">
         <img [src]="movie.posterUrl" [alt]="movie.title" class="result-poster" loading="lazy" />
@@ -58,8 +83,10 @@
   </ion-list>
 
   <!-- No results -->
-  <div *ngIf="searched && !loading && results.length === 0" class="empty-state">
-    <ion-icon name="sad-outline" class="empty-icon"></ion-icon>
-    <p class="font-body">No se encontraron resultados para "{{ query }}"</p>
-  </div>
+  <app-empty-state
+    *ngIf="searched && !loading && !error && results.length === 0"
+    icon="sad-outline"
+    title="Sin resultados"
+    [subtitle]="'No se encontraron resultados para &quot;' + query + '&quot;'"
+  ></app-empty-state>
 </ion-content>

@@ -22,26 +22,6 @@
   }
 }
 
-.empty-state {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: 80px 20px;
-  color: var(--text-secondary);
-
-  .empty-icon {
-    font-size: 48px;
-    margin-bottom: 12px;
-    opacity: 0.5;
-  }
-
-  p {
-    font-size: 15px;
-    text-align: center;
-  }
-}
-
 .search-result {
   display: flex;
   gap: 12px;
@@ -84,6 +64,53 @@
 .result-ratings {
   display: flex;
   gap: 6px;
+}
+
+// Skeleton search results
+.search-loading {
+  padding: 0 8px;
+}
+
+.skeleton-search-result {
+  display: flex;
+  gap: 12px;
+  padding: 8px;
+}
+
+.skeleton-search-poster {
+  width: 60px;
+  height: 90px;
+  border-radius: 8px;
+  flex-shrink: 0;
+}
+
+.skeleton-search-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 6px;
+}
+
+.skeleton-search-title {
+  height: 16px;
+  width: 75%;
+}
+
+.skeleton-search-year {
+  height: 12px;
+  width: 30%;
+}
+
+.skeleton-search-ratings {
+  display: flex;
+  gap: 6px;
+}
+
+.skeleton-search-badge {
+  height: 26px;
+  width: 56px;
+  border-radius: 8px;
 }
 
 ion-list {

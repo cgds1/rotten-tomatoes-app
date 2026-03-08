@@ -1,0 +1,13 @@
+<div class="error-state-container slide-up-fade">
+  <ion-icon name="alert-circle-outline" class="error-state__icon"></ion-icon>
+  <p class="error-state__message font-body">{{ message }}</p>
+  <ion-button
+    class="error-state__retry"
+    fill="solid"
+    color="danger"
+    (click)="onRetry()"
+  >
+    <ion-icon slot="start" name="refresh-outline"></ion-icon>
+    Reintentar
+  </ion-button>
+</div>

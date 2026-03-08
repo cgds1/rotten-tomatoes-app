@@ -19,7 +19,12 @@ export class MovieDetailPage implements OnInit {
   movie: MovieDetail | null = null;
   comments: Comment[] = [];
   loading = true;
+  error: string | null = null;
   synopsisExpanded = false;
+  commentsLoading = false;
+  commentsError: string | null = null;
+
+  private movieId = '';
 
   get currentUserId(): string {
     return this.authService.currentUser?.id || '';
@@ -52,12 +57,16 @@ export class MovieDetailPage implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    const id = this.route.snapshot.paramMap.get('id')!;
-    this.loadMovie(id);
+    this.movieId = this.route.snapshot.paramMap.get('id')!;
+    this.loadMovie(this.movieId);
   }
 
   goBack(): void {
     this.navCtrl.back();
+  }
+
+  retryLoad(): void {
+    this.loadMovie(this.movieId);
   }
 
   toggleSynopsis(): void {
@@ -66,6 +75,22 @@ export class MovieDetailPage implements OnInit {
 
   getInitials(name: string): string {
     return name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2);
+  }
+
+  loadComments(): void {
+    if (!this.movie) return;
+    this.commentsLoading = true;
+    this.commentsError = null;
+    this.commentsService.getByMovie(this.movie.id).subscribe({
+      next: (comments) => {
+        this.comments = comments;
+        this.commentsLoading = false;
+      },
+      error: () => {
+        this.commentsError = 'Error al cargar reseñas';
+        this.commentsLoading = false;
+      },
+    });
   }
 
   async openCommentForm(existing?: Comment): Promise<void> {
@@ -113,6 +138,7 @@ export class MovieDetailPage implements OnInit {
 
   private loadMovie(id: string): void {
     this.loading = true;
+    this.error = null;
     this.moviesService.getMovieDetail(id).subscribe({
       next: (movie) => {
         this.movie = movie;
@@ -120,6 +146,7 @@ export class MovieDetailPage implements OnInit {
         this.loading = false;
       },
       error: () => {
+        this.error = 'No se pudo cargar la película';
         this.loading = false;
       },
     });
