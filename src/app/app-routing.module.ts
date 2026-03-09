@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
 import { authGuard } from './core/guards/auth.guard';
 import { guestGuard } from './core/guards/guest.guard';
+import { onboardingGuard } from './core/guards/onboarding.guard';
 
 const routes: Routes = [
   {
@@ -43,8 +44,8 @@ const routes: Routes = [
   },
   {
     path: '',
-    redirectTo: 'tabs',
-    pathMatch: 'full',
+    canActivate: [onboardingGuard],
+    children: [],
   },
 ];
 

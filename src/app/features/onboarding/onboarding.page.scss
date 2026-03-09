@@ -23,7 +23,6 @@ swiper-container {
   text-align: center;
   padding: 40px 32px;
   height: 100%;
-  animation: slideUpFade 0.5s cubic-bezier(0.22, 1, 0.36, 1) forwards;
 }
 
 .slide-icon {
@@ -35,6 +34,8 @@ swiper-container {
   align-items: center;
   justify-content: center;
   margin-bottom: 32px;
+  opacity: 0;
+  animation: fadeIn 0.5s 0.1s cubic-bezier(0.22, 1, 0.36, 1) forwards;
 
   ion-icon {
     font-size: 40px;
@@ -47,6 +48,9 @@ swiper-container {
   color: var(--text-primary);
   margin: 0 0 12px;
   line-height: 1.2;
+  opacity: 0;
+  transform: translateY(16px);
+  animation: slideUpFade 0.5s 0.25s cubic-bezier(0.22, 1, 0.36, 1) forwards;
 }
 
 .slide-subtitle {
@@ -55,6 +59,9 @@ swiper-container {
   margin: 0;
   max-width: 280px;
   line-height: 1.5;
+  opacity: 0;
+  transform: translateY(12px);
+  animation: slideUpFade 0.5s 0.4s cubic-bezier(0.22, 1, 0.36, 1) forwards;
 }
 
 // Rating preview (Slide 2)
@@ -67,6 +74,9 @@ swiper-container {
   background: var(--bg-card);
   border-radius: 16px;
   border: 1px solid var(--bg-elevated);
+  opacity: 0;
+  transform: scale(0.9);
+  animation: scaleIn 0.5s 0.55s cubic-bezier(0.22, 1, 0.36, 1) forwards;
 }
 
 .rating-box {
@@ -83,9 +93,14 @@ swiper-container {
   letter-spacing: 0.5px;
 }
 
-.rating-user,
+.rating-user {
+  font-size: 28px;
+  color: var(--color-user);
+}
+
 .rating-critic {
   font-size: 28px;
+  color: var(--color-critic);
 }
 
 .rating-divider {
@@ -119,12 +134,18 @@ swiper-container {
   background: rgba(110, 156, 200, 0.12);
   color: var(--color-user);
   border: 1px solid rgba(110, 156, 200, 0.25);
+  opacity: 0;
+  transform: translateX(-16px);
+  animation: slideInLeft 0.4s 0.5s cubic-bezier(0.22, 1, 0.36, 1) forwards;
 }
 
 .role-critic {
   background: rgba(200, 169, 110, 0.12);
   color: var(--color-critic);
   border: 1px solid rgba(200, 169, 110, 0.25);
+  opacity: 0;
+  transform: translateX(16px);
+  animation: slideInRight 0.4s 0.7s cubic-bezier(0.22, 1, 0.36, 1) forwards;
 }
 
 // Dot indicators
@@ -169,4 +190,37 @@ swiper-container {
   --color: var(--text-secondary);
   font-size: 14px;
   font-family: 'Inter', sans-serif;
+}
+
+// Animations
+@keyframes fadeIn {
+  to { opacity: 1; }
+}
+
+@keyframes slideUpFade {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes scaleIn {
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes slideInLeft {
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideInRight {
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
 }

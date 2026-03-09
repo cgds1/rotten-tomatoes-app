@@ -1,8 +1,11 @@
 import { Component, AfterViewInit, ElementRef, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
+import { StorageService } from '../../core/services/storage.service';
 import { register } from 'swiper/element/bundle';
 
 register();
+
+const ONBOARDING_KEY = 'hasSeenOnboarding';
 
 @Component({
   selector: 'app-onboarding',
@@ -16,7 +19,10 @@ export class OnboardingPage implements AfterViewInit {
   currentSlide = 0;
   totalSlides = 3;
 
-  constructor(private router: Router) {}
+  constructor(
+    private router: Router,
+    private storage: StorageService,
+  ) {}
 
   ngAfterViewInit(): void {
     const swiperEl = this.swiperRef.nativeElement;
@@ -37,11 +43,16 @@ export class OnboardingPage implements AfterViewInit {
     if (this.currentSlide < this.totalSlides - 1) {
       this.swiperRef.nativeElement.swiper.slideNext();
     } else {
-      this.start();
+      this.completeOnboarding();
     }
   }
 
-  start(): void {
-    this.router.navigateByUrl('/tabs');
+  skip(): void {
+    this.completeOnboarding();
+  }
+
+  private async completeOnboarding(): Promise<void> {
+    await this.storage.set(ONBOARDING_KEY, true);
+    this.router.navigateByUrl('/auth/login');
   }
 }
