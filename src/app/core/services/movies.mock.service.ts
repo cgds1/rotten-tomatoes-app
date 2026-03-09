@@ -4,7 +4,7 @@ import { delay } from 'rxjs/operators';
 import { IMoviesService } from './interfaces/movies-service.interface';
 import { Movie, MovieDetail, MovieFilter, PaginatedResponse } from '../models/movie.model';
 import { MOCK_MOVIES, MockMovieData } from '../mocks/mock-movies';
-import { MOCK_COMMENTS } from '../mocks/mock-comments';
+import { CommentsMockService } from './comments.mock.service';
 import { environment } from '../../../environments/environment';
 
 const MOCK_DELAY = 800;
@@ -13,13 +13,13 @@ const MOCK_DELAY = 800;
 export class MoviesMockService implements IMoviesService {
   private movies: MockMovieData[] = MOCK_MOVIES.map(m => ({ ...m }));
 
-  constructor() {
+  constructor(private commentsMock: CommentsMockService) {
     this.recalculateAllRatings();
   }
 
   private recalculateAllRatings(): void {
     for (const movie of this.movies) {
-      const comments = MOCK_COMMENTS.filter(c => c.movieId === movie.id);
+      const comments = this.commentsMock.comments.filter(c => c.movieId === movie.id);
       const userScores = comments.filter(c => c.user.role === 'USER').map(c => c.score);
       const criticScores = comments.filter(c => c.user.role === 'CRITIC').map(c => c.score);
 
@@ -121,7 +121,7 @@ export class MoviesMockService implements IMoviesService {
       return throwError(() => new Error(`Película no encontrada: ${id}`)).pipe(delay(MOCK_DELAY));
     }
 
-    const comments = MOCK_COMMENTS.filter(c => c.movieId === id);
+    const comments = this.commentsMock.comments.filter(c => c.movieId === id);
     const userComments = comments.filter(c => c.user.role === 'USER');
     const criticComments = comments.filter(c => c.user.role === 'CRITIC');
 

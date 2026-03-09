@@ -171,11 +171,15 @@ export class MyProfilePage implements OnInit {
         {
           text: 'Continuar',
           cssClass: 'alert-danger-button',
-          handler: () => this.showDeleteConfirmation(),
+          role: 'destructive',
         },
       ],
     });
     await alert1.present();
+    const { role } = await alert1.onDidDismiss();
+    if (role === 'destructive') {
+      await this.showDeleteConfirmation();
+    }
   }
 
   private async showDeleteConfirmation() {

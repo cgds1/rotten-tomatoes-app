@@ -12,7 +12,7 @@ const MOCK_DELAY = 800;
 
 @Injectable({ providedIn: 'root' })
 export class CommentsMockService implements ICommentsService {
-  private comments: Comment[] = [...MOCK_COMMENTS];
+  comments: Comment[] = [...MOCK_COMMENTS];
   private movies: MockMovieData[] = MOCK_MOVIES.map(m => ({ ...m }));
 
   constructor(private authService: AuthService) {}
