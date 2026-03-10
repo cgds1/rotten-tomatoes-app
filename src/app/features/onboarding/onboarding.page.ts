@@ -53,6 +53,6 @@ export class OnboardingPage implements AfterViewInit {
 
   private async completeOnboarding(): Promise<void> {
     await this.storage.set(ONBOARDING_KEY, true);
-    this.router.navigateByUrl('/auth/login');
+    this.router.navigateByUrl('/auth/login', { replaceUrl: true });
   }
 }

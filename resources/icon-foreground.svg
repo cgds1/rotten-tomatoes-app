@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="1024" viewBox="0 0 1024 1024">
+  <!-- Transparent background for adaptive icon foreground -->
+  <!-- Film strip frame -->
+  <rect x="200" y="260" width="624" height="504" rx="24" fill="none" stroke="#C8A96E" stroke-width="12"/>
+  <!-- Sprocket holes top -->
+  <rect x="230" y="278" width="32" height="24" rx="4" fill="#C8A96E"/>
+  <rect x="284" y="278" width="32" height="24" rx="4" fill="#C8A96E"/>
+  <rect x="338" y="278" width="32" height="24" rx="4" fill="#C8A96E"/>
+  <rect x="654" y="278" width="32" height="24" rx="4" fill="#C8A96E"/>
+  <rect x="708" y="278" width="32" height="24" rx="4" fill="#C8A96E"/>
+  <rect x="762" y="278" width="32" height="24" rx="4" fill="#C8A96E"/>
+  <!-- Sprocket holes bottom -->
+  <rect x="230" y="722" width="32" height="24" rx="4" fill="#C8A96E"/>
+  <rect x="284" y="722" width="32" height="24" rx="4" fill="#C8A96E"/>
+  <rect x="338" y="722" width="32" height="24" rx="4" fill="#C8A96E"/>
+  <rect x="654" y="722" width="32" height="24" rx="4" fill="#C8A96E"/>
+  <rect x="708" y="722" width="32" height="24" rx="4" fill="#C8A96E"/>
+  <rect x="762" y="722" width="32" height="24" rx="4" fill="#C8A96E"/>
+  <!-- Star -->
+  <polygon points="512,340 562,462 692,462 588,540 624,660 512,588 400,660 436,540 332,462 462,462" fill="#C8A96E"/>
+</svg>

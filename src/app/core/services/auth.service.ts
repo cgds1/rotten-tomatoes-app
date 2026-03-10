@@ -34,10 +34,18 @@ export class AuthService {
   ) {}
 
   async loadSession(): Promise<void> {
-    const token = await this.storage.get<string>(TOKEN_KEY);
-    const user = await this.storage.get<User>(USER_KEY);
-    if (token && user) {
-      this.userSubject.next(user);
+    try {
+      const timeout = new Promise<void>((resolve) => setTimeout(resolve, 3000));
+      const load = async () => {
+        const token = await this.storage.get<string>(TOKEN_KEY);
+        const user = await this.storage.get<User>(USER_KEY);
+        if (token && user) {
+          this.userSubject.next(user);
+        }
+      };
+      await Promise.race([load(), timeout]);
+    } catch {
+      // If storage fails, continue without session
     }
   }
 

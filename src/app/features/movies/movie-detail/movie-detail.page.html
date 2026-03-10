@@ -114,6 +114,7 @@
             <img
               [src]="member.profileUrl"
               [alt]="member.name"
+              loading="lazy"
               (error)="member.imageError = true"
             />
           </div>

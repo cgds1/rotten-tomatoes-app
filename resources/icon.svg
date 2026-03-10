@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="1024" viewBox="0 0 1024 1024">
+  <rect width="1024" height="1024" rx="180" fill="#0D0D0D"/>
+  <!-- Film strip top -->
+  <rect x="120" y="280" width="784" height="464" rx="24" fill="none" stroke="#C8A96E" stroke-width="12"/>
+  <!-- Sprocket holes top -->
+  <rect x="150" y="296" width="36" height="28" rx="4" fill="#C8A96E"/>
+  <rect x="210" y="296" width="36" height="28" rx="4" fill="#C8A96E"/>
+  <rect x="270" y="296" width="36" height="28" rx="4" fill="#C8A96E"/>
+  <rect x="718" y="296" width="36" height="28" rx="4" fill="#C8A96E"/>
+  <rect x="778" y="296" width="36" height="28" rx="4" fill="#C8A96E"/>
+  <rect x="838" y="296" width="36" height="28" rx="4" fill="#C8A96E"/>
+  <!-- Sprocket holes bottom -->
+  <rect x="150" y="700" width="36" height="28" rx="4" fill="#C8A96E"/>
+  <rect x="210" y="700" width="36" height="28" rx="4" fill="#C8A96E"/>
+  <rect x="270" y="700" width="36" height="28" rx="4" fill="#C8A96E"/>
+  <rect x="718" y="700" width="36" height="28" rx="4" fill="#C8A96E"/>
+  <rect x="778" y="700" width="36" height="28" rx="4" fill="#C8A96E"/>
+  <rect x="838" y="700" width="36" height="28" rx="4" fill="#C8A96E"/>
+  <!-- Star -->
+  <polygon points="512,360 556,468 672,468 578,536 610,644 512,580 414,644 446,536 352,468 468,468" fill="#C8A96E"/>
+  <!-- CineRank text -->
+  <text x="512" y="830" text-anchor="middle" font-family="serif" font-size="96" fill="#C8A96E" letter-spacing="4">CineRank</text>
+</svg>

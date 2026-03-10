@@ -94,8 +94,11 @@ ion-segment {
 
 ion-segment-button {
   --color: var(--text-secondary);
-  --color-checked: var(--color-critic);
+  --color-checked: #0D0D0D;
   --indicator-color: var(--color-critic);
+  font-family: 'Inter', sans-serif;
+  font-weight: 600;
+  letter-spacing: 0.3px;
 }
 
 ion-button {

@@ -1,9 +1,12 @@
 ion-tab-bar {
   --border: 1px solid var(--bg-elevated);
+  --background: var(--bg-primary);
   padding-top: 4px;
 }
 
 ion-tab-button {
+  --color: var(--text-secondary);
+  --color-selected: var(--color-accent);
   font-family: 'Inter', sans-serif;
   font-size: 10px;
 }

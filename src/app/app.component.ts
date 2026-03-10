@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Capacitor } from '@capacitor/core';
 import { SplashScreen } from '@capacitor/splash-screen';
 
 @Component({
@@ -9,8 +10,14 @@ import { SplashScreen } from '@capacitor/splash-screen';
 })
 export class AppComponent implements OnInit {
   async ngOnInit(): Promise<void> {
-    setTimeout(async () => {
-      await SplashScreen.hide({ fadeOutDuration: 500 });
-    }, 1500);
+    if (Capacitor.isNativePlatform()) {
+      setTimeout(async () => {
+        try {
+          await SplashScreen.hide({ fadeOutDuration: 500 });
+        } catch {
+          // Splash screen might not be available, continue anyway
+        }
+      }, 1500);
+    }
   }
 }
