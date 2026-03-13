@@ -132,6 +132,7 @@ export class MoviesHttpService implements IMoviesService {
         total: res.meta.total,
         page: res.meta.page,
         limit: res.meta.limit,
+        totalPages: res.meta.totalPages,
       })),
     );
   }

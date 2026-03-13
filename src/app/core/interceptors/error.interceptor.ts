@@ -9,6 +9,7 @@ const ERROR_MESSAGES: Record<number, string> = {
   403: 'No tenés permiso para esta acción',
   404: 'No se encontró el recurso',
   409: 'Conflicto con datos existentes',
+  429: 'Demasiadas solicitudes, esperá un momento',
 };
 
 export const errorInterceptor: HttpInterceptorFn = (req, next) => {

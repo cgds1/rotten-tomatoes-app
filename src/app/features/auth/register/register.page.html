@@ -61,7 +61,7 @@
             type="password"
             label="Contraseña"
             labelPlacement="floating"
-            placeholder="Mínimo 6 caracteres"
+            placeholder="Mínimo 8 caracteres"
           ></ion-input>
         </ion-item>
         <p
@@ -80,7 +80,16 @@
             form.get('password')?.hasError('minlength')
           "
         >
-          Mínimo 6 caracteres
+          Mínimo 8 caracteres
+        </p>
+        <p
+          class="field-error"
+          *ngIf="
+            form.get('password')?.touched &&
+            form.get('password')?.hasError('pattern')
+          "
+        >
+          Debe incluir mayúscula, minúscula y número
         </p>
       </div>
 

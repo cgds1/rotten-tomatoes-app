@@ -1,8 +1,8 @@
 import { AuthResponse, RegisterRequest, User } from '../../models/user.model';
 
 export interface UpdateProfileRequest {
-  name: string;
-  email: string;
+  name?: string;
+  email?: string;
 }
 
 export interface IAuthService {
