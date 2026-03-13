@@ -21,6 +21,22 @@ export class CommentItemComponent {
   @Output() onEdit = new EventEmitter<Comment>();
   @Output() onDelete = new EventEmitter<Comment>();
 
+  expanded = false;
+  private readonly maxLength = 200;
+
+  get isLong(): boolean {
+    return this.comment.content.length > this.maxLength;
+  }
+
+  get displayText(): string {
+    if (this.expanded || !this.isLong) return this.comment.content;
+    return this.comment.content.slice(0, this.maxLength).replace(/\s+$/, '') + '...';
+  }
+
+  toggleExpand(): void {
+    this.expanded = !this.expanded;
+  }
+
   get isOwn(): boolean {
     return this.comment.user.id === this.currentUserId;
   }

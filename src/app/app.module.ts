@@ -8,24 +8,13 @@ import { IonicStorageModule } from '@ionic/storage-angular';
 
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
-import { environment } from '../environments/environment';
 import { AUTH_SERVICE, MOVIES_SERVICE, COMMENTS_SERVICE } from './core/services/service-tokens';
-import { AuthMockService } from './core/services/auth.mock.service';
-import { MoviesMockService } from './core/services/movies.mock.service';
-import { CommentsMockService } from './core/services/comments.mock.service';
+import { AuthHttpService } from './core/services/auth.http.service';
+import { MoviesHttpService } from './core/services/movies.http.service';
+import { CommentsHttpService } from './core/services/comments.http.service';
 import { AuthService } from './core/services/auth.service';
 import { authInterceptor } from './core/interceptors/auth.interceptor';
 import { errorInterceptor } from './core/interceptors/error.interceptor';
-
-const serviceProviders = environment.useMocks
-  ? [
-      { provide: AUTH_SERVICE, useClass: AuthMockService },
-      { provide: MOVIES_SERVICE, useClass: MoviesMockService },
-      { provide: COMMENTS_SERVICE, useClass: CommentsMockService },
-    ]
-  : [
-      // TODO: HTTP service implementations for production
-    ];
 
 function initAuth(auth: AuthService) {
   return () => auth.loadSession();
@@ -41,7 +30,9 @@ function initAuth(auth: AuthService) {
   ],
   providers: [
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
-    ...serviceProviders,
+    { provide: AUTH_SERVICE, useClass: AuthHttpService },
+    { provide: MOVIES_SERVICE, useClass: MoviesHttpService },
+    { provide: COMMENTS_SERVICE, useClass: CommentsHttpService },
     provideHttpClient(withInterceptors([authInterceptor, errorInterceptor])),
     {
       provide: APP_INITIALIZER,

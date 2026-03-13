@@ -1,9 +1,10 @@
 import { Injectable, Inject, signal, computed } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
 import { firstValueFrom } from 'rxjs';
 import { Movie, MovieFilter, Category, SortBy } from '../core/models/movie.model';
 import { IMoviesService } from '../core/services/interfaces/movies-service.interface';
 import { MOVIES_SERVICE } from '../core/services/service-tokens';
-import { MOCK_CATEGORIES } from '../core/mocks/mock-categories';
+import { environment } from '../../environments/environment';
 
 @Injectable({ providedIn: 'root' })
 export class MoviesState {
@@ -16,7 +17,7 @@ export class MoviesState {
     page: 1,
     limit: 10,
   });
-  private _categories = signal<Category[]>(MOCK_CATEGORIES);
+  private _categories = signal<Category[]>([]);
   private _selectedCategory = signal<number | null>(null);
   private _total = signal(0);
   private _error = signal<string | null>(null);
@@ -34,8 +35,22 @@ export class MoviesState {
   readonly hasMore = computed(() => this._movies().length < this._total());
 
   constructor(
-    @Inject(MOVIES_SERVICE) private moviesService: IMoviesService
-  ) {}
+    @Inject(MOVIES_SERVICE) private moviesService: IMoviesService,
+    private http: HttpClient,
+  ) {
+    this.loadCategories();
+  }
+
+  async loadCategories(): Promise<void> {
+    try {
+      const categories = await firstValueFrom(
+        this.http.get<Category[]>(`${environment.apiUrl}/categories`),
+      );
+      this._categories.set(categories);
+    } catch {
+      // Categories will remain empty if API fails
+    }
+  }
 
   async loadMovies(): Promise<void> {
     this._loading.set(true);
@@ -97,8 +112,19 @@ export class MoviesState {
     return this.loadMovies();
   }
 
-  setSearch(query: string): Promise<void> {
+  async setSearch(query: string): Promise<void> {
     this._filters.update(f => ({ ...f, search: query || undefined }));
+
+    // If searching, first trigger TMDB search to persist new movies in the backend DB,
+    // then load the filtered local list
+    if (query.trim()) {
+      try {
+        await firstValueFrom(this.moviesService.searchMovies(query));
+      } catch {
+        // TMDB search failed — still try to load local results
+      }
+    }
+
     return this.loadMovies();
   }
 }

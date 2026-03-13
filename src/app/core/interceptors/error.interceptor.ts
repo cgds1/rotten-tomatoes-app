@@ -24,8 +24,12 @@ export const errorInterceptor: HttpInterceptorFn = (req, next) => {
       if (error.status >= 500) {
         message = 'Error del servidor';
       } else {
-        message =
-          error.error?.message || ERROR_MESSAGES[error.status] || 'Error inesperado';
+        const backendMsg = error.error?.message;
+        if (Array.isArray(backendMsg)) {
+          message = backendMsg.join('. ');
+        } else {
+          message = backendMsg || ERROR_MESSAGES[error.status] || 'Error inesperado';
+        }
       }
 
       toastCtrl

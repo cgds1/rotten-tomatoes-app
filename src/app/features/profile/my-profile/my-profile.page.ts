@@ -4,9 +4,9 @@ import { AlertController, ToastController } from '@ionic/angular';
 import { firstValueFrom } from 'rxjs';
 import { AuthService } from '../../../core/services/auth.service';
 import { ICommentsService } from '../../../core/services/interfaces/comments-service.interface';
-import { COMMENTS_SERVICE } from '../../../core/services/service-tokens';
+import { IMoviesService } from '../../../core/services/interfaces/movies-service.interface';
+import { COMMENTS_SERVICE, MOVIES_SERVICE } from '../../../core/services/service-tokens';
 import { Comment } from '../../../core/models/comment.model';
-import { MOCK_MOVIES } from '../../../core/mocks/mock-movies';
 import { MoviesState } from '../../../state/movies.state';
 
 export interface UserReview {
@@ -36,6 +36,7 @@ export class MyProfilePage implements OnInit {
     private toastController: ToastController,
     private moviesState: MoviesState,
     @Inject(COMMENTS_SERVICE) private commentsService: ICommentsService,
+    @Inject(MOVIES_SERVICE) private moviesService: IMoviesService,
   ) {}
 
   ngOnInit() {
@@ -76,14 +77,28 @@ export class MyProfilePage implements OnInit {
 
     try {
       const comments = await firstValueFrom(this.commentsService.getByUser(this.user.id));
-      this.reviews = comments.map(c => {
-        const movie = MOCK_MOVIES.find(m => m.id === c.movieId);
-        return {
-          comment: c,
-          movieTitle: movie?.title ?? 'Película desconocida',
-          moviePoster: movie?.posterUrl ?? '',
-        };
-      });
+
+      // Fetch movie info for each comment in parallel
+      const reviews: UserReview[] = await Promise.all(
+        comments.map(async (c) => {
+          try {
+            const movie = await firstValueFrom(this.moviesService.getMovieDetail(c.movieId));
+            return {
+              comment: c,
+              movieTitle: movie.title,
+              moviePoster: movie.posterUrl,
+            };
+          } catch {
+            return {
+              comment: c,
+              movieTitle: 'Película desconocida',
+              moviePoster: '',
+            };
+          }
+        }),
+      );
+
+      this.reviews = reviews;
       this.reviewCount = this.reviews.length;
       this.averageScore = this.reviewCount > 0
         ? Math.round((comments.reduce((sum, c) => sum + c.score, 0) / this.reviewCount) * 10) / 10

@@ -39,8 +39,16 @@ export class AuthService {
       const load = async () => {
         const token = await this.storage.get<string>(TOKEN_KEY);
         const user = await this.storage.get<User>(USER_KEY);
-        if (token && user) {
-          this.userSubject.next(user);
+        if (!token || !user) return;
+
+        // Validate the token by fetching the user profile
+        try {
+          const freshUser = await this.authBackend.getMe();
+          await this.storage.set(USER_KEY, freshUser);
+          this.userSubject.next(freshUser);
+        } catch {
+          // Token is invalid/expired — clear stale session
+          await this.clearSession();
         }
       };
       await Promise.race([load(), timeout]);
@@ -60,7 +68,15 @@ export class AuthService {
   }
 
   async logout(): Promise<void> {
-    await this.authBackend.logout();
+    try {
+      await this.authBackend.logout();
+    } catch {
+      // Ignore errors during logout (token may already be invalid)
+    }
+    await this.clearSession();
+  }
+
+  private async clearSession(): Promise<void> {
     await this.storage.remove(TOKEN_KEY);
     await this.storage.remove(REFRESH_TOKEN_KEY);
     await this.storage.remove(USER_KEY);
@@ -77,7 +93,8 @@ export class AuthService {
       await this.storage.set(TOKEN_KEY, newToken);
       return newToken;
     } catch {
-      await this.logout();
+      // Don't call logout() here to avoid calling the backend again
+      await this.clearSession();
       return null;
     }
   }
@@ -90,10 +107,7 @@ export class AuthService {
 
   async deleteAccount(): Promise<void> {
     await this.authBackend.deleteAccount();
-    await this.storage.remove(TOKEN_KEY);
-    await this.storage.remove(REFRESH_TOKEN_KEY);
-    await this.storage.remove(USER_KEY);
-    this.userSubject.next(null);
+    await this.clearSession();
   }
 
   private async saveSession(

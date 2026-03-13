@@ -15,7 +15,7 @@
     <span class="comment-score font-mono">{{ comment.score.toFixed(1) }}</span>
   </div>
 
-  <p class="comment-text">{{ comment.content }}</p>
+  <p class="comment-text">{{ displayText }}<span *ngIf="isLong" class="toggle-text" (click)="toggleExpand()">{{ expanded ? ' Ver menos' : ' Ver más' }}</span></p>
 
   <div class="comment-actions" *ngIf="isOwn">
     <ion-button fill="clear" size="small" (click)="onEdit.emit(comment)">

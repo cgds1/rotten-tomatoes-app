@@ -82,6 +82,13 @@
   line-height: 1.5;
   color: var(--text-primary);
   margin: 0;
+  word-break: break-word;
+}
+
+.toggle-text {
+  color: var(--color-user);
+  font-weight: 600;
+  cursor: pointer;
 }
 
 .comment-actions {
