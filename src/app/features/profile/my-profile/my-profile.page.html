@@ -54,25 +54,25 @@
       <div
         class="review-item"
         *ngFor="let review of reviews"
-        (click)="goToMovie(review.comment.movieId)"
+        (click)="goToMovie(review.movie.id)"
       >
         <img
           class="review-poster"
-          [src]="review.moviePoster"
-          [alt]="review.movieTitle"
+          [src]="review.movie.posterUrl"
+          [alt]="review.movie.title"
           loading="lazy"
         />
         <div class="review-info">
-          <span class="review-title font-body">{{ review.movieTitle }}</span>
+          <span class="review-title font-body">{{ review.movie.title }}</span>
           <span class="review-date font-body">
-            {{ review.comment.createdAt | date:'dd/MM/yyyy' }}
+            {{ review.createdAt | date:'dd/MM/yyyy' }}
           </span>
         </div>
         <span
           class="review-score font-mono"
-          [style.color]="getScoreColor(review.comment.score)"
+          [style.color]="getScoreColor(review.score)"
         >
-          {{ review.comment.score.toFixed(1) }}
+          {{ review.score.toFixed(1) }}
         </span>
       </div>
     </div>

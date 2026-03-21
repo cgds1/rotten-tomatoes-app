@@ -18,3 +18,11 @@ export interface UpdateCommentRequest {
   score?: number;
   content?: string;
 }
+
+export interface UserComment extends Comment {
+  movie: {
+    id: string;
+    title: string;
+    posterUrl: string;
+  };
+}

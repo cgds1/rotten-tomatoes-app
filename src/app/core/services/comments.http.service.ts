@@ -1,10 +1,9 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, of } from 'rxjs';
-import { map, tap } from 'rxjs/operators';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { ICommentsService } from './interfaces/comments-service.interface';
-import { Comment, CreateCommentRequest, UpdateCommentRequest } from '../models/comment.model';
-import { StorageService } from './storage.service';
+import { Comment, CreateCommentRequest, UpdateCommentRequest, UserComment } from '../models/comment.model';
 import { environment } from '../../../environments/environment';
 
 interface ApiComment {
@@ -18,6 +17,21 @@ interface ApiComment {
   user: { name: string; role: 'USER' | 'CRITIC' };
 }
 
+interface ApiUserComment {
+  id: string;
+  content: string;
+  score: number;
+  userId: string;
+  movieId: string;
+  createdAt: string;
+  updatedAt: string;
+  movie: {
+    id: string;
+    title: string;
+    posterUrl: string;
+  };
+}
+
 function mapComment(raw: ApiComment): Comment {
   return {
     id: raw.id,
@@ -29,16 +43,27 @@ function mapComment(raw: ApiComment): Comment {
   };
 }
 
-const USER_COMMENTS_KEY = 'user_comments_cache';
+function mapUserComment(raw: ApiUserComment): UserComment {
+  return {
+    id: raw.id,
+    content: raw.content,
+    score: raw.score,
+    user: { id: raw.userId, name: '', role: 'USER' },
+    movieId: raw.movieId,
+    createdAt: raw.createdAt,
+    movie: {
+      id: raw.movie.id,
+      title: raw.movie.title,
+      posterUrl: raw.movie.posterUrl,
+    },
+  };
+}
 
 @Injectable({ providedIn: 'root' })
 export class CommentsHttpService implements ICommentsService {
   private baseUrl = environment.apiUrl;
 
-  constructor(
-    private http: HttpClient,
-    private storage: StorageService,
-  ) {}
+  constructor(private http: HttpClient) {}
 
   getByMovie(movieId: string): Observable<Comment[]> {
     return this.http.get<ApiComment[]>(`${this.baseUrl}/comments/movie/${movieId}`).pipe(
@@ -46,18 +71,10 @@ export class CommentsHttpService implements ICommentsService {
     );
   }
 
-  getByUser(_userId: string): Observable<Comment[]> {
-    // The API doesn't have a dedicated endpoint for user comments.
-    // Return cached comments from local storage (populated on create/update/delete).
-    return new Observable(subscriber => {
-      this.storage.get<Comment[]>(USER_COMMENTS_KEY).then(cached => {
-        subscriber.next(cached || []);
-        subscriber.complete();
-      }).catch(() => {
-        subscriber.next([]);
-        subscriber.complete();
-      });
-    });
+  getMyComments(): Observable<UserComment[]> {
+    return this.http.get<ApiUserComment[]>(`${this.baseUrl}/comments/me`).pipe(
+      map(comments => comments.map(mapUserComment)),
+    );
   }
 
   create(movieId: string, data: CreateCommentRequest): Observable<Comment> {
@@ -67,45 +84,16 @@ export class CommentsHttpService implements ICommentsService {
       score: data.score,
     }).pipe(
       map(mapComment),
-      tap(comment => this.addToCache(comment)),
     );
   }
 
   update(commentId: string, data: UpdateCommentRequest): Observable<Comment> {
     return this.http.patch<ApiComment>(`${this.baseUrl}/comments/${commentId}`, data).pipe(
       map(mapComment),
-      tap(comment => this.updateInCache(comment)),
     );
   }
 
   delete(commentId: string): Observable<void> {
-    return this.http.delete<void>(`${this.baseUrl}/comments/${commentId}`).pipe(
-      tap(() => this.removeFromCache(commentId)),
-    );
-  }
-
-  private async addToCache(comment: Comment): Promise<void> {
-    const cached = (await this.storage.get<Comment[]>(USER_COMMENTS_KEY)) || [];
-    cached.push(comment);
-    await this.storage.set(USER_COMMENTS_KEY, cached);
-  }
-
-  private async updateInCache(comment: Comment): Promise<void> {
-    const cached = (await this.storage.get<Comment[]>(USER_COMMENTS_KEY)) || [];
-    const index = cached.findIndex(c => c.id === comment.id);
-    if (index !== -1) {
-      cached[index] = comment;
-    }
-    await this.storage.set(USER_COMMENTS_KEY, cached);
-  }
-
-  private async removeFromCache(commentId: string): Promise<void> {
-    const cached = (await this.storage.get<Comment[]>(USER_COMMENTS_KEY)) || [];
-    await this.storage.set(USER_COMMENTS_KEY, cached.filter(c => c.id !== commentId));
-  }
-
-  /** Call this on logout to clear cached user comments */
-  async clearCache(): Promise<void> {
-    await this.storage.remove(USER_COMMENTS_KEY);
+    return this.http.delete<void>(`${this.baseUrl}/comments/${commentId}`);
   }
 }
